@@ -19,7 +19,7 @@ humano = Raza("Humano", alianza, ["Guerrero","Cazador", "Mago", "Paladin"])
 elfo_de_la_noche = Raza("Elfo de la Noche", alianza, ["Guerrero","Cazador", "Druida"])
 
 #Razas Horda
-orco = Raza("Orco", horda, ["Guerrero","Cazador", "Mago", "Chamán"])
+orco = Raza("Orco", horda, ["Guerrero","Cazador", "Mago", "Chaman"])
 no_muerto = Raza("No Muerto", horda, ["Guerrero","Cazador", "Brujo"])
 
 #Creando Habilidades
