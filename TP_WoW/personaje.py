@@ -8,10 +8,11 @@ class Personaje(ABC):
     
     _contador_personajes = 0
     
-    def __init__(self, nombre: str, nivel: int, salud: int, mana: int, 
-                clase_personaje: ClaseDePersonaje, inventario: Inventario):
-    
-        self.id_personaje = Personaje._contador_personajes
+    def __init__(self, nombre: str, nivel: int, salud: int, mana: int,
+                 clase_personaje: ClaseDePersonaje, inventario: Inventario):
+        
+        # Atributo autoincremental según UML
+        self.__id_personaje = Personaje._contador_personajes
         Personaje._contador_personajes += 1
         
         self.__nombre = nombre
@@ -19,7 +20,7 @@ class Personaje(ABC):
         self.__salud = salud
         self.__mana = mana
         self.__clase_personaje = clase_personaje
-        self.__habilidades:list = []
+        self.__habilidades: List = []
         self.__inventario = inventario
         
     @property
@@ -97,13 +98,13 @@ class Personaje(ABC):
                 self.mana += 10
             else:
                 return "Clase desconocida. No se han aplicado mejoras de salud y mana."
+            
             self._experiencia = 0
         else:
             print("El personaje ya ha alcanzado el nivel máximo.")
         
-        return (f"{self.nombre} ha subido al nivel {self.nivel}! "
-                f"Salud: {self.salud}, Maná: {self.mana}.")
-    
+        return f"{self.nombre} ha subido a nivel {self.nivel}. Salud: {self.salud}, Maná: {self.mana}"
+
     def asignar_inventario(self, inventario_personaje: Inventario) -> str:
         if isinstance(inventario_personaje, Inventario):
             self.inventario = inventario_personaje
@@ -139,6 +140,11 @@ class Personaje(ABC):
     @classmethod
     def cantidadPersonajes(cls) -> int:
         return cls._contador_personajes
+
+
+    # ===========================
+    # Represewntacion
+    # ===========================
     
     def __str__(self) -> str:
         habs = self.mostrar_habilidades()

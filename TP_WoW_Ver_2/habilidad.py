@@ -1,0 +1,41 @@
+
+class Habilidad():
+    def __init__(self, nombre: str, tipo: str, costo_mana: int, daño: int):
+        self.__nombre = nombre
+        self.__tipo = tipo
+        self.__costo_mana = costo_mana
+        self.__daño = daño
+    
+    @property
+    def nombre(self) -> str:
+        return self.__nombre
+    @nombre.setter
+    def nombre(self, nombre: str):
+        self.__nombre = nombre
+    
+    @property
+    def tipo(self) -> str:
+        return self.__tipo
+    @tipo.setter
+    def tipo(self, tipo: str):
+        self.__tipo = tipo
+    
+    @property
+    def costo_mana(self) -> int:
+        return self.__costo_mana
+    @costo_mana.setter
+    def costo_mana(self, costo_mana: int):
+        self.__costo_mana = costo_mana
+    
+    @property
+    def daño(self) -> int:
+        return self.__daño
+    @daño.setter
+    def daño(self, daño: int):
+        self.__daño = daño
+    
+    def usar(self, objetivo: str) -> None:
+        return f"{self.nombre} usada contra {objetivo}, causando {self.daño} de daño."
+    
+    def __str__(self):
+        return f"Habilidad: {self.nombre} | Tipo: {self.tipo} | Costo de Mana: {self.costo_mana} | Daño: {self.daño}"

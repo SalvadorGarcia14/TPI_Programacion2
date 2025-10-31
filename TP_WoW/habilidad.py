@@ -1,4 +1,4 @@
-class Habilidad:
+class Habilidad():
     def __init__(self, nombre: str, tipo: str, costo_mana: int, daño:int):
         self.__nombre = nombre
         self.__tipo = tipo
