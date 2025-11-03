@@ -221,43 +221,45 @@ def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la li
             else:
                 print("Usuario no encontrado. Intente nuevamente. \n")
                 continue
-        
         elif opcion == "2":
             print("REGISTRO DE NUEVO USUARIO ")
             nuevo_usuario = input("Ingrese un nombre de usuario único: ").strip()
-            
+    
             if not nuevo_usuario:
                 print("El nombre de usuario no puede estar vacío. \n")
-                
-                existe = False
-                for jugador in jugadores:
-                    if jugador.nombre == nuevo_usuario:
-                        existe = True
-                        break
-                
-                if existe:
-                    print("Ese nombre de usuario ya está en uso. Intenta con otro. \n")
-                    continue
-                
-                # Crear primer personaje automáticamente
-                print(f"Usuario '{nuevo_usuario}' registrado con éxito. \n")
+                continue  # vuelve al menú
+    
+            # Verificar si el nombre ya existe
+            existe = False
+            for jugador in jugadores:
+                if jugador.nombre_usuario == nuevo_usuario:  # <-- aquí era jugador.nombre, debería ser nombre_usuario
+                    existe = True
+                    break
+    
+            if existe:
+                print("Ese nombre de usuario ya está en uso. Intenta con otro. \n")
+                continue
+    
+            # Crear personaje automáticamente
+            print(f"Usuario '{nuevo_usuario}' registrado con éxito. \n")
+            pausar()
+            nuevo_personaje = crear_nuevo_personaje(nuevo_usuario)
+    
+            if nuevo_personaje:
+                print(f"¡Bienvenido {nuevo_personaje.nombre}! Tu aventura comienza ahora. \n")
                 pausar()
-                nuevo_personaje = crear_nuevo_personaje(nuevo_usuario)
-                
-                if nuevo_personaje:
-                    print(f"¡Bienvenido {nuevo_personaje.nombre}! Tu aventura comienza ahora. \n")
-                    pausar()
-                    return nuevo_personaje
-                else:
-                    print("No se pudo crear el personaje. Volviendo al menú principal. \n")
-                    continue
-
-            elif opcion == "3":
-                print("Saliendo del juego. ¡Hasta pronto!")
-                return None
-
+                return nuevo_personaje
             else:
-                print("Opción inválida. Intenta nuevamente.\n")
+                print("No se pudo crear el personaje. Volviendo al menú principal. \n")
+                continue
+
+
+        elif opcion == "3":
+            print("Saliendo del juego. ¡Hasta pronto!")
+            return None
+
+        else:
+            print("Opción inválida. Intenta nuevamente.\n")
 
     
 # def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la lista de jugadores.
@@ -452,7 +454,8 @@ def main():
             crear_nuevo_personaje(jugador_activo.nombre_usuario)
         elif opcion == "9":
             print("¡Gracias por jugar World of Pythoncraft! \n")
-            break
+            pausar()
+            iniciar_sesion()
         else:
             print("Opción inválida.")
             pausar()
