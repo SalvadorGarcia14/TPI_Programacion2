@@ -73,6 +73,7 @@ def submenu_combate(jugador_activo):
 
         if opcion == "1":
             enemigo = random.choice(enemigos)
+            enemigo.resetear_salud()  # ✅ Resetea su salud antes de pelear
             print(f"¡Has encontrado un {enemigo.nombre} de nivel {enemigo.nivel}!\n")
             pausar()
             return combate(jugador_activo, enemigo)
@@ -121,22 +122,24 @@ def combate(jugador_activo, enemigo):
             
             elif opcion == "2":
                 print("--- Habilidades disponibles ---\n")
-                
+    
+                # Mostrar solo las habilidades de la clase del jugador
                 for i, habilidad in enumerate(jugador_activo.clase_personaje.habilidades):
                     print(f"{i + 1} - {habilidad}")
-                    
+        
                 eleccion = input("Elige habilidad: ")
-                if eleccion:
+                if eleccion.isdigit():
                     indice = int(eleccion) - 1
-                    
-                    if indice >= 0 and indice < len(habilidades):
-                        habilidad = habilidades[indice]
+        
+                    if 0 <= indice < len(jugador_activo.clase_personaje.habilidades):
+                        habilidad = jugador_activo.clase_personaje.habilidades[indice]
                         resultado = jugador_activo.atacar(enemigo, habilidad)
                         print(resultado)
                     else:
-                        print(" Opción fuera de rango.")
+                        print("Opción fuera de rango.")
                 else:
-                    print(" Debes ingresar un número válido.")
+                    print("Debes ingresar un número válido.")
+
 
             elif opcion == "3":
                 print(f"{jugador_activo.nombre} huyó del combate ")
@@ -149,24 +152,19 @@ def combate(jugador_activo, enemigo):
             
             # Verificar si el enemigo murió
             if not enemigo.esta_vivo():
-                print(f"💀 {enemigo.nombre} ha sido derrotado. \n")
+                print(f"{enemigo.nombre} ha sido derrotado. \n")
                 enemigo_vivo = False
-                
+
                 exp = enemigo.calcular_recompensa()
-                print(jugador_activo.ganar_experiencia(exp))
-            
-                # Subir nivel si corresponde
-                if jugador_activo.experiencia >= 100:
-                    print(jugador_activo.subir_nivel())
-                
+                print(jugador_activo.ganar_experiencia(exp))  # Esto ya maneja subir de nivel
+
                 # Drop aleatorio
-                
                 if objetos:
                     drop = random.choice(objetos)
-                    print(f" El enemigo dejó caer un objeto: {drop.nombre}")
+                    print(f"El enemigo dejó caer un objeto: {drop.nombre}")
                     jugador_activo.agregar_objeto_inventario(drop)
-                pausar()
-                break
+                    pausar()
+                    break
 
             turno_jugador = False  # Ahora ataca el enemigo
 
@@ -194,27 +192,94 @@ def combate(jugador_activo, enemigo):
 
 #Funciones Principal
 
-    
 def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la lista de jugadores.
     print("======================================================================")
     print("      Bienvenido a WORLD OF PYTHONCRAFT  v1.0       ")
     print("======================================================================")
     print("Proyecto basado en POO y UML estilo WoW\n")
+
+    while True:
+        print("1 -> Iniciar Sesión")
+        print("2 -> Nuevo Usuario")
+        print("3 -> Salir\n")
+        
+        opcion = input("Elegi una opcion: ")
+        
+        if opcion == "1":
+
+            nombre_usuario_ingresado = input("Ingrese su nombre de usuario: ")
+
+            usuario_valido = None
+            for jugador in jugadores:
+                if jugador.nombre_usuario == nombre_usuario_ingresado:
+                    usuario_valido = jugador
+                    break
+
+            if usuario_valido:
+                print(f"Bienvenido {usuario_valido.nombre} ({usuario_valido.nombre_usuario}) \n")
+                return usuario_valido
+            else:
+                print("Usuario no encontrado. Intente nuevamente. \n")
+                continue
+        
+        elif opcion == "2":
+            print("REGISTRO DE NUEVO USUARIO ")
+            nuevo_usuario = input("Ingrese un nombre de usuario único: ").strip()
+            
+            if not nuevo_usuario:
+                print("El nombre de usuario no puede estar vacío. \n")
+                
+                existe = False
+                for jugador in jugadores:
+                    if jugador.nombre == nuevo_usuario:
+                        existe = True
+                        break
+                
+                if existe:
+                    print("Ese nombre de usuario ya está en uso. Intenta con otro. \n")
+                    continue
+                
+                # Crear primer personaje automáticamente
+                print(f"Usuario '{nuevo_usuario}' registrado con éxito. \n")
+                pausar()
+                nuevo_personaje = crear_nuevo_personaje(nuevo_usuario)
+                
+                if nuevo_personaje:
+                    print(f"¡Bienvenido {nuevo_personaje.nombre}! Tu aventura comienza ahora. \n")
+                    pausar()
+                    return nuevo_personaje
+                else:
+                    print("No se pudo crear el personaje. Volviendo al menú principal. \n")
+                    continue
+
+            elif opcion == "3":
+                print("Saliendo del juego. ¡Hasta pronto!")
+                return None
+
+            else:
+                print("Opción inválida. Intenta nuevamente.\n")
+
     
-    nombre_usuario_ingresado = input("Ingrese su nombre de usuario para iniciar sesión: ")
+# def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la lista de jugadores.
+#     print("======================================================================")
+#     print("      Bienvenido a WORLD OF PYTHONCRAFT  v1.0       ")
+#     print("======================================================================")
+#     print("Proyecto basado en POO y UML estilo WoW\n")
     
-    usuario_valido = None
-    for jugador in jugadores:
-        if jugador.nombre_usuario == nombre_usuario_ingresado:
-            usuario_valido = jugador
-            break
+#     nombre_usuario_ingresado = input("Ingrese su nombre de usuario para iniciar sesión: ")
     
-    if usuario_valido:
-        print(f"\n✅ Bienvenido {usuario_valido.nombre} ({usuario_valido.nombre_usuario})\n")
-        return usuario_valido
-    else:
-        print("\n❌ Usuario no encontrado. Intente nuevamente.\n")
-        return None
+#     usuario_valido = None
+#     for jugador in jugadores:
+#         if jugador.nombre_usuario == nombre_usuario_ingresado:
+#             usuario_valido = jugador
+#             break
+    
+#     if usuario_valido:
+#         print(f"\n✅ Bienvenido {usuario_valido.nombre} ({usuario_valido.nombre_usuario})\n")
+#         return usuario_valido
+#     else:
+#         print("\n❌ Usuario no encontrado. Intente nuevamente.\n")
+#         return None
 
 #Seleccion de personaje
 def seleccionar_personaje(jugadores, nombre_usuario):

@@ -62,44 +62,11 @@ class Jugador(Personaje):
 
     def recibir_daño(self, cantidad):
         self.salud -= cantidad
-        if self.salud <= 0:
+        if self.salud < 0:
             self.salud = 0
             return f"{self.nombre} ha sido derrotado."
         return f"{self.nombre} recibe {cantidad} de daño. Salud restante: {self.salud}."
     
-    def subir_nivel(self):
-        if self.nivel < self.nivel_maximo:
-            self.nivel += 1
-            
-        #Aumenta salud y mana según la clase del personaje
-        
-        if self.clase_personaje.nombre == "guerrero":
-            self.salud += 20
-            self.mana += 5
-        elif self.clase_personaje.nombre == "mago":
-            self.salud += 10
-            self.mana += 20
-        elif self.clase_personaje.nombre == "cazador":
-            self.salud += 15
-            self.mana += 10
-        elif self.clase_personaje.nombre == "druida":
-            self.salud += 15
-            self.mana += 15
-        elif self.clase_personaje.nombre == "paladin":
-            self.salud += 25
-            self.mana += 10
-        elif self.clase_personaje.nombre == "brujo":
-            self.salud += 10
-            self.mana += 25
-        elif self.clase_personaje.nombre == "chaman":
-            self.salud += 20
-            self.mana += 15
-            
-            self.experencia = 0  # Reiniciar experiencia al subir de nivel
-            return f"{self.nombre} ha subido al nivel {self.nivel}!"
-        
-        else:
-            return f"{self.nombre} ya ha alcanzado el nivel máximo {self.nivel_maximo}."
     
     def calcular_experiencia_nivel(self):
         """Retorna la experiencia necesaria para pasar al siguiente nivel."""
@@ -113,49 +80,49 @@ class Jugador(Personaje):
         self.experiencia += cantidad
         mensaje = f"{self.nombre} ha ganado {cantidad} puntos de experiencia.\n"
 
-        # Calcular experiencia necesaria para subir al siguiente nivel
-        experiencia_necesaria = self.calcular_experiencia_nivel()
-
-        # Mientras el jugador tenga suficiente experiencia para subir
-        while self.experiencia >= experiencia_necesaria and self.nivel < self.nivel_maximo:
-            self.experiencia -= experiencia_necesaria
-            self.nivel += 1
-
-            # Aumentar salud y maná según la clase del personaje
-            clase = self.clase_personaje.nombre.lower()
-
-            if clase == "guerrero":
-                self.salud += 20
-                self.mana += 5
-            elif clase == "mago":
-                self.salud += 10
-                self.mana += 20
-            elif clase == "cazador":
-                self.salud += 15
-                self.mana += 10
-            elif clase == "druida":
-                self.salud += 15
-                self.mana += 15
-            elif clase == "paladin":
-                self.salud += 25
-                self.mana += 10
-            elif clase == "brujo":
-                self.salud += 10
-                self.mana += 25
-            elif clase == "chaman":
-                self.salud += 20
-                self.mana += 15
-
-            mensaje += f"🎉 {self.nombre} ha subido al nivel {self.nivel}! Salud: {self.salud}, Maná: {self.mana}\n"
-
-            # Recalcular la nueva experiencia necesaria para el próximo nivel
+        while self.nivel < self.nivel_maximo:
             experiencia_necesaria = self.calcular_experiencia_nivel()
 
+            # Si alcanza para subir de nivel
+            if self.experiencia >= experiencia_necesaria:
+                self.experiencia -= experiencia_necesaria
+                self.nivel += 1
+
+                clase = self.clase_personaje.nombre.lower()
+
+                if clase == "guerrero":
+                    self.salud += 20
+                    self.mana += 5
+                elif clase == "mago":
+                    self.salud += 10
+                    self.mana += 20
+                elif clase == "cazador":
+                    self.salud += 15
+                    self.mana += 10
+                elif clase == "druida":
+                    self.salud += 15
+                    self.mana += 15
+                elif clase == "paladin":
+                    self.salud += 25
+                    self.mana += 10
+                elif clase == "brujo":
+                    self.salud += 10
+                    self.mana += 25
+                elif clase == "chaman":
+                    self.salud += 20
+                    self.mana += 15
+
+                mensaje += f"🎉 {self.nombre} ha subido al nivel {self.nivel}! Salud: {self.salud}, Maná: {self.mana}\n"
+
+            else:
+                break  # No alcanza experiencia para el siguiente nivel
+
+        # Si llegó al máximo nivel, bloquear progreso y reiniciar experiencia
         if self.nivel >= self.nivel_maximo:
-            mensaje += f"{self.nombre} ha alcanzado el nivel máximo ({self.nivel_maximo}).\n"
+            self.experiencia = 0
+            mensaje += f"{self.nombre} ya ha alcanzado el nivel máximo {self.nivel_maximo}.\n"
 
         return mensaje
-    
     def __str__(self):
         return (f"Jugador: {self.nombre} | Usuario: {self.nombre_usuario} | Nivel: {self.nivel} | "
                 f"Salud: {self.salud} | Mana: {self.mana} | Experiencia: {self.experiencia} | "

@@ -29,8 +29,13 @@ class Inventario():
         return self.__objetos
     
     def agregar_objeto(self, objeto: Objeto) -> str:
+        if len(self.objetos) >= 20:
+            print("El inventario está lleno.")
+            return
         self.objetos.append(objeto)
+        print(f"{objeto.nombre} agregado al inventario.")
     
+        
     def remover_objeto(self, objeto: Objeto) -> str:
         if objeto in self.objetos:
             self.objetos.remove(objeto)

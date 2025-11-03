@@ -22,6 +22,7 @@ class Personaje(ABC):
         self.__nombre = nombre
         self.__nivel = nivel
         self.__salud = salud
+        self.__salud_maxima = salud 
         self.__mana = mana
         
         self.__clase_personaje = clase_personaje
@@ -52,7 +53,11 @@ class Personaje(ABC):
         return self.__salud
     @salud.setter
     def salud(self, nueva_salud: int):
-        self.__salud = nueva_salud
+        self.__salud = max(0, nueva_salud) 
+
+    @property
+    def salud_maxima(self) -> int:
+        return self.__salud_maxima
     
     @property
     def mana(self) -> int:

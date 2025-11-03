@@ -1,7 +1,7 @@
 from typing import List
 from clase_personaje import ClasePersonaje  # si la necesitas
 
-class Raza:
+class Raza():
     def __init__(self, nombre: str, bando: str, clases_disponibles: List[ClasePersonaje]):
         self.__nombre = nombre
         self.__bando = bando
