@@ -59,7 +59,6 @@ class Personaje(ABC):
     @property
     def salud_maxima(self) -> int:
         return self.__salud_maxima
-
     @salud_maxima.setter
     def salud_maxima(self, nueva_salud_maxima: int):
         self.__salud_maxima = nueva_salud_maxima

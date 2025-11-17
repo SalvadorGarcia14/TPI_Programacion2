@@ -4,7 +4,7 @@ from typing import List
 
 class ClasePersonaje():
     
-    _contador_clases_personaje = 0  # Atributo de clase para llevar el conteo de instancias
+    _contador_clases_personaje = 0  # Contador Id
     
     def __init__(self, nombre: str, rol: str, poder_base: int, habilidades: List[Habilidad]):
         

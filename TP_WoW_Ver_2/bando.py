@@ -5,7 +5,7 @@ from raza import Raza
 class Bando():
     def __init__(self, nombre):
         self.__nombre = nombre
-        self.__razas = []
+        self.__razas:List[Raza] = []
     
     @property
     def nombre(self):
@@ -18,7 +18,7 @@ class Bando():
     def razas(self) -> List[Raza]:
         return self.__razas
     @razas.setter
-    def razas(self, nuevas_razas: List[Raza]):
+    def razas(self, nuevas_razas:List[Raza]):
         self.__razas = nuevas_razas
 
     def agregar_raza(self, nombre_raza):

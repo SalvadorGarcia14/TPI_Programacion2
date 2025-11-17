@@ -7,7 +7,7 @@ class Jugador(Personaje):
     _nombres_usuarios = set()  # Conjunto para rastrear nombres de usuario únicos
     
     def __init__(self, nombre: str, nivel: int, salud: int,salud_maxima ,mana: int,mana_maxima: int,  
-                 clase_personaje, inventario, nombre_usuario: str, experiencia: int, defensa: int, ataque: int  ,nivel_maximo: int = 100):
+                 clase_personaje, inventario, nombre_usuario: str, experiencia: int, defensa: int, ataque: int, nivel_maximo: int = 100):
         
         super().__init__(nombre, nivel, salud,salud_maxima ,mana,mana_maxima, clase_personaje, inventario)
         
@@ -55,7 +55,7 @@ class Jugador(Personaje):
     def nivel_maximo(self, nuevo_nivel_maximo: int):
         self.__nivel_maximo = nuevo_nivel_maximo
     
-    def resetear_mana(self):
+    def resetear_mana(self) -> int:
         self.mana = self.mana_maxima
     
     def atacar(self, objetivo, habilidad):

@@ -29,11 +29,21 @@ class Raza():
         self.__clases_disponibles = nuevas_clases
     
     def puede_usar_clase(self, nombre_clase: str) -> bool:
-        return any(c.nombre == nombre_clase for c in self.clases_disponibles)
+        for clase in self.clases_disponibles:
+            if clase.nombre == nombre_clase:
+                return True
+        return False
     
     def obtener_bando(self) -> str:
-        return self.bando if self.bando else None
+        if self.bando:
+            return self.bando
+        else:
+            return None
     
     def __str__(self):
-        clases_nombres = ', '.join([c.nombre for c in self.clases_disponibles])
-        return f"Raza: {self.nombre} | Bando: {self.bando} | Clases Disponibles: {clases_nombres}"
+        clases_nombres = []
+        for clase in self.clases_disponibles:
+            clases_nombres.append(clase.nombre)
+        clase_disponibles = ",".join(clases_nombres)
+
+        return f"Raza: {self.nombre} | Bando: {self.bando} | Clases Disponibles: {clase_disponibles}"

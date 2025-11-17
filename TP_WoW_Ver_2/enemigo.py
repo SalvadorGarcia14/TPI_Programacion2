@@ -24,10 +24,16 @@ class Enemigo(Personaje):
     @property
     def tipo_enemigo(self) -> str:
         return self.__tipo_enemigo
+    @tipo_enemigo.setter
+    def tipo_enemigo(self, nuevo_tipo_enemigo) -> str:
+        self.__tipo_enemigo = nuevo_tipo_enemigo
     
     @property
     def recompensa_experiencia(self) -> int:
         return self.__recompensa_experiencia
+    @recompensa_experiencia.setter
+    def recompensa_experiencia(self, nuevo_recompensa_experiencia) -> int:
+        self.recompensa_experiencia = nuevo_recompensa_experiencia
 
     @property
     def rango_oro(self) -> List:
