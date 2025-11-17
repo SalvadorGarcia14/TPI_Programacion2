@@ -8,10 +8,10 @@ class Enemigo(Personaje):
     
     _nombres_enemigos = set()  
     
-    def __init__(self, nombre: str, nivel: int, salud: int, mana: int, 
-                 clase_personaje, inventario, tipo_enemigo: str, recompensa_experiencia: int):
+    def __init__(self, nombre: str, nivel: int, salud: int,salud_maxima: int, mana: int,mana_maxima:int,  
+                 clase_personaje, inventario, tipo_enemigo: str, recompensa_experiencia: int, rango_oro: List[int]):
         
-        super().__init__(nombre, nivel, salud, mana, clase_personaje, inventario)
+        super().__init__(nombre, nivel, salud,salud_maxima ,mana,mana_maxima, clase_personaje, inventario)
         
         if nombre in Enemigo._nombres_enemigos:
             raise ValueError(f"El nombre de enemigo '{nombre}' ya está en uso. Por favor, elija otro.")
@@ -19,6 +19,7 @@ class Enemigo(Personaje):
         
         self.__tipo_enemigo = tipo_enemigo
         self.__recompensa_experiencia = recompensa_experiencia
+        self.__rango_oro = rango_oro
     
     @property
     def tipo_enemigo(self) -> str:
@@ -27,6 +28,10 @@ class Enemigo(Personaje):
     @property
     def recompensa_experiencia(self) -> int:
         return self.__recompensa_experiencia
+
+    @property
+    def rango_oro(self) -> List:
+        return self.__rango_oro
     
     def atacar(self, objetivo, habilidad):
         if habilidad in self.clase_personaje.habilidades:
@@ -53,15 +58,22 @@ class Enemigo(Personaje):
     def calcular_experiencia_nivel(self):
         return 0
 
-    def calcular_recompensa(self) -> int:
+    def calcular_recompensa(self) -> tuple[int, int]:
+        # EXP
         nivel_factor = self.nivel * 10
         tipo_factor = {
-            "común": 1,
-            "raro": 2,
-            "épico": 3,
-            "legendario": 5
+        "común": 1,
+        "raro": 2,
+        "épico": 3,
+        "legendario": 5
         }.get(self.tipo_enemigo.lower(), 1)
-        return nivel_factor * tipo_factor
+    
+        exp = nivel_factor * tipo_factor
+
+        # ORO
+        oro = random.randint(self.rango_oro[0], self.rango_oro[1])
+
+        return exp, oro
     
     def __str__(self):
         return (f"Enemigo: {self.nombre} | Tipo: {self.tipo_enemigo} | Nivel: {self.nivel} | "

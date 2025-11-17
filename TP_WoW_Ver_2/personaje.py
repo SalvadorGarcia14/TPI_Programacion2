@@ -10,7 +10,7 @@ class Personaje(ABC):
 
     _contador_id_personajes = 0  # Atributo de clase para llevar el conteo de instancias
     
-    def __init__(self, nombre: str, nivel: int, salud: int, mana: int, 
+    def __init__(self, nombre: str, nivel: int, salud: int,salud_maxima: int ,mana: int, mana_maxima: int,
                 clase_personaje: ClasePersonaje, inventario: Inventario):
         
         self.__id_personaje = Personaje._contador_id_personajes
@@ -22,8 +22,9 @@ class Personaje(ABC):
         self.__nombre = nombre
         self.__nivel = nivel
         self.__salud = salud
-        self.__salud_maxima = salud 
+        self.__salud_maxima = salud_maxima 
         self.__mana = mana
+        self.__mana_maxima = mana_maxima
         
         self.__clase_personaje = clase_personaje
         self.__inventario = inventario
@@ -58,6 +59,10 @@ class Personaje(ABC):
     @property
     def salud_maxima(self) -> int:
         return self.__salud_maxima
+
+    @salud_maxima.setter
+    def salud_maxima(self, nueva_salud_maxima: int):
+        self.__salud_maxima = nueva_salud_maxima
     
     @property
     def mana(self) -> int:
@@ -65,6 +70,13 @@ class Personaje(ABC):
     @mana.setter
     def mana(self, nuevo_mana: int):
         self.__mana = nuevo_mana
+        
+    @property
+    def mana_maxima(self) -> int:
+        return self.__mana_maxima
+    @mana_maxima.setter
+    def mana_maxima(self, nuevo_mana_maximo) -> int:
+        self.__mana_maxima = nuevo_mana_maximo
         
     @property
     def clase_personaje(self) -> ClasePersonaje:
@@ -106,9 +118,7 @@ class Personaje(ABC):
         return self.inventario.agregar_objeto(objeto)
     
     def mostrar_inventario(self) -> List[str]:
-        return self.inventario.mostrar_objetos()
-
-        
+        return self.inventario.mostrar_objetos()        
     
     def __str__(self):
         habilidades_nombres = []

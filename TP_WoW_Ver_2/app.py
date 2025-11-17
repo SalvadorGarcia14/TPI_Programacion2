@@ -1,4 +1,4 @@
-from datos import jugadores, enemigos, clases_personaje, razas, habilidades, objetos, obtener_datos_precargados, alianza, horda
+from datos import jugadores, enemigos, clases_personaje, razas, habilidades, objetos, alianza, horda
 
 from inventario import Inventario
 from jugador import Jugador
@@ -61,32 +61,27 @@ def mostrar_objetos():
 
 def submenu_combate(jugador_activo):
     while True:
-        limpiar_pantalla()
         print(f"\n=== Modo Combate - {jugador_activo.nombre} ===")
         print("1. Buscar Enemigo Aleatorio")
-        print("2. Atacar")
-        print("3. Usar Habilidad")
-        print("4. Ver Estado del Jugador")
-        print("5. Volver al Menú Principal")
+        print("2. Ver Estado del Jugador")
+        print("3. Usar Objeto")
+        print("4. Volver al Menú Principal")
         
         opcion = input("Elige una opción: ")      
 
         if opcion == "1":
             enemigo = random.choice(enemigos)
             enemigo.resetear_salud()  # ✅ Resetea su salud antes de pelear
+            jugador_activo.resetear_mana()
             print(f"¡Has encontrado un {enemigo.nombre} de nivel {enemigo.nivel}!\n")
+            combate(jugador_activo, enemigo)
             pausar()
-            return combate(jugador_activo, enemigo)
         elif opcion == "2":
-            print("Primero debes encontrar un enemigo. \n")
-            pausar()
-        elif opcion == "3":
-            print("Primero debes entrar en combate. \n")
-            pausar()
-        elif opcion == "4":
             print(jugador_activo)
             pausar()
-        elif opcion == "5":
+        elif opcion == "3":
+            seleccionar_objeto(jugador_activo)
+        elif opcion == "4":
             print("Volviendo al menú principal...\n ")
             break
         else:
@@ -103,14 +98,14 @@ def combate(jugador_activo, enemigo):
     enemigo_vivo = True
     
     while jugador_activo.esta_vivo() and enemigo_vivo:
-        print(f"\n{jugador_activo.nombre}: {jugador_activo.salud} HP | Mana: {jugador_activo.mana}")
+        print(f"\n{jugador_activo.nombre}: {jugador_activo.salud} HP | Daño Basico: {jugador_activo.ataque} |Mana: {jugador_activo.mana}")
         print(f"{enemigo.nombre}: {enemigo.salud} HP | Mana: {enemigo.mana}\n")
         
         if turno_jugador:
             print("=== Tu turno ===")
             print("1. Ataque básico")
             print("2. Usar habilidad")
-            print("3. Huir del combate")
+            print("4. Huir del combate")
 
             opcion = input("Elige una acción: ")
             
@@ -140,8 +135,7 @@ def combate(jugador_activo, enemigo):
                 else:
                     print("Debes ingresar un número válido.")
 
-
-            elif opcion == "3":
+            elif opcion == "4":
                 print(f"{jugador_activo.nombre} huyó del combate ")
                 return
             
@@ -155,15 +149,17 @@ def combate(jugador_activo, enemigo):
                 print(f"{enemigo.nombre} ha sido derrotado. \n")
                 enemigo_vivo = False
 
-                exp = enemigo.calcular_recompensa()
-                print(jugador_activo.ganar_experiencia(exp))  # Esto ya maneja subir de nivel
-
+                exp, oro = enemigo.calcular_recompensa()
+                print(jugador_activo.ganar_experiencia(exp))
+                
+                jugador_activo.inventario.modificar_oro(oro)
+                print(f"Has ganado {oro} de oro!")
+                
                 # Drop aleatorio
                 if objetos:
                     drop = random.choice(objetos)
                     print(f"El enemigo dejó caer un objeto: {drop.nombre}")
                     jugador_activo.agregar_objeto_inventario(drop)
-                    pausar()
                     break
 
             turno_jugador = False  # Ahora ataca el enemigo
@@ -175,16 +171,48 @@ def combate(jugador_activo, enemigo):
             print(enemigo.atacar(jugador_activo, habilidad_enemiga))
 
             if not jugador_activo.esta_vivo():
-                print(f"☠️ {jugador_activo.nombre} ha muerto en combate. \n")
+                print(f" {jugador_activo.nombre} ha muerto en combate. \n")
                 pausar()
                 return
 
             turno_jugador = True
             time.sleep(1.5)
 
-            
-            
-            
+# Función para usar objetos
+def seleccionar_objeto(jugador_activo):
+    objetos = jugador_activo.inventario.objetos
+    if not objetos:
+        print("No tienes objetos para usar.")
+        return
+    
+    while True:
+        print("\nObjetos disponibles:")
+        for i, objeto in enumerate(objetos, start=1):
+            print(f"{i} -> {objeto}")
+
+        print("0 -> Salir sin usar objeto")
+
+        opcion = input("Elige un objeto: ")
+
+        # Verifica si solo preciona ENTER o escribio algo no numerico
+        if not opcion.isdigit():
+            print(" Debes ingresar un número válido.")
+            continue
+
+        opcion = int(opcion)
+
+        # 0 = salir
+        if opcion == 0:
+            print("Saliendo sin usar ningún objeto.")
+            return
+
+        # Vlida rango correcto
+        if 1 <= opcion <= len(objetos):
+            jugador_activo.inventario.usar_objeto(jugador_activo, opcion - 1)
+            return
+        else:
+            print("Opción inválida, selecciona un número correcto.")
+
             
                     
 # ===============================================

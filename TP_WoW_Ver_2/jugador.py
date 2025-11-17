@@ -6,10 +6,10 @@ class Jugador(Personaje):
     
     _nombres_usuarios = set()  # Conjunto para rastrear nombres de usuario únicos
     
-    def __init__(self, nombre: str, nivel: int, salud: int, mana: int, 
-                 clase_personaje, inventario, nombre_usuario: str, experiencia: int, defensa: int ,nivel_maximo: int = 100):
+    def __init__(self, nombre: str, nivel: int, salud: int,salud_maxima ,mana: int,mana_maxima: int,  
+                 clase_personaje, inventario, nombre_usuario: str, experiencia: int, defensa: int, ataque: int  ,nivel_maximo: int = 100):
         
-        super().__init__(nombre, nivel, salud, mana, clase_personaje, inventario)
+        super().__init__(nombre, nivel, salud,salud_maxima ,mana,mana_maxima, clase_personaje, inventario)
         
         if nombre_usuario in Jugador._nombres_usuarios:
             raise ValueError(f"El nombre de usuario '{nombre_usuario}' ya está en uso. Por favor, elija otro.")
@@ -17,6 +17,7 @@ class Jugador(Personaje):
         self.__nombre_usuario = nombre_usuario
         self.__experiencia = experiencia
         self.__defensa = defensa
+        self.__ataque = ataque
         self.__nivel_maximo = nivel_maximo
         
     @property
@@ -39,6 +40,13 @@ class Jugador(Personaje):
     @defensa.setter
     def defensa(self, nueva_defensa: int):
         self.__defensa = nueva_defensa
+
+    @property
+    def ataque(self) -> int:
+        return self.__ataque
+    @ataque.setter
+    def ataque(self, nueva_ataque: int):
+        self.__ataque = nueva_ataque
     
     @property
     def nivel_maximo(self) -> int:
@@ -46,6 +54,9 @@ class Jugador(Personaje):
     @nivel_maximo.setter
     def nivel_maximo(self, nuevo_nivel_maximo: int):
         self.__nivel_maximo = nuevo_nivel_maximo
+    
+    def resetear_mana(self):
+        self.mana = self.mana_maxima
     
     def atacar(self, objetivo, habilidad):
         if habilidad in self.clase_personaje.habilidades:
@@ -93,26 +104,33 @@ class Jugador(Personaje):
                 if clase == "guerrero":
                     self.salud += 20
                     self.mana += 5
+                    self.ataque += 10
                 elif clase == "mago":
                     self.salud += 10
                     self.mana += 20
+                    self.ataque += 5
                 elif clase == "cazador":
                     self.salud += 15
                     self.mana += 10
+                    self.ataque += 15
                 elif clase == "druida":
                     self.salud += 15
                     self.mana += 15
+                    self.ataque += 10
                 elif clase == "paladin":
                     self.salud += 25
                     self.mana += 10
+                    self.ataque += 12
                 elif clase == "brujo":
                     self.salud += 10
                     self.mana += 25
+                    self.ataque += 4
                 elif clase == "chaman":
                     self.salud += 20
                     self.mana += 15
+                    self.ataque += 10
 
-                mensaje += f"🎉 {self.nombre} ha subido al nivel {self.nivel}! Salud: {self.salud}, Maná: {self.mana}\n"
+                mensaje += f"🎉 {self.nombre} ha subido al nivel {self.nivel}! Salud: {self.salud}, Daño Basico: {self.ataque} ,Maná: {self.mana}\n"
 
             else:
                 break  # No alcanza experiencia para el siguiente nivel
@@ -123,7 +141,42 @@ class Jugador(Personaje):
             mensaje += f"{self.nombre} ya ha alcanzado el nivel máximo {self.nivel_maximo}.\n"
 
         return mensaje
+    
+    def ganar_oro(self, cantidad):
+        self.inventario.modificar_oro(cantidad)
+        return cantidad
+    
+    def aplicar_efecto(self, efectos: dict):
+    
+        if "vida" in efectos:
+            self.salud = self.salud + efectos["vida"]
+            if self.salud > self.salud_maxima:
+                self.salud = self.salud_maxima
+
+        if "vida_max" in efectos:
+            self.salud_maxima = self.salud_maxima + efectos["vida_max"]
+            self.salud = self.salud + efectos["vida_max"]
+
+        if "ataque" in efectos:
+            self.ataque += efectos["ataque"]
+
+        if "defensa" in efectos:
+            self.defensa += efectos["defensa"]
+        
+    def remover_efecto(self, efectos: dict):
+        if "vida_max" in efectos:
+            if self.hp_actual > self.salud_maxima:
+                self.hp_actual = self.salud_maxima         
+    
+        if "ataque" in efectos:
+            self.ataque -= efectos["ataque"]
+
+        if "defensa" in efectos:
+            self.defensa_base -= efectos["defensa"]   
+    
+    
+    
     def __str__(self):
         return (f"Jugador: {self.nombre} | Usuario: {self.nombre_usuario} | Nivel: {self.nivel} | "
-                f"Salud: {self.salud} | Mana: {self.mana} | Experiencia: {self.experiencia} | "
+                f"Salud: {self.salud} | Daño Basico: {self.ataque} | Mana: {self.mana} | Experiencia: {self.experiencia} | Oro: {self.inventario.oro} | "
                 f"Clase: {self.clase_personaje.nombre}")

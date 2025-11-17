@@ -158,10 +158,37 @@ razas = [
 ]
 
 #Objetos y Inventarios
-espada = Objeto("Espada Rúnica", "Una espada forjada con runas antiguas", 10)
-arco = Objeto("Arco Largo", "Ideal para combates a distancia", 8)
-pocion = Objeto("Poción de Curación", "Restaura puntos de vida", 25)
-talisman = Objeto("Talismán Sombrío", "Aumenta el poder mágico", 60)
+espada = Objeto(
+    nombre="Espada Rúnica",
+    descripcion="Una espada forjada con runas antiguas que aumenta el ataque.",
+    tipo="equipable",
+    efectos={"ataque": 10},   # +10 de ataque
+    valor=100
+)
+
+arco = Objeto(
+    nombre="Arco Largo",
+    descripcion="Ideal para combates a distancia, aumenta ligeramente el ataque.",
+    tipo="equipable",
+    efectos={"ataque": 8},    # +8 de ataque
+    valor=90
+)
+
+pocion = Objeto(
+    nombre="Poción de Curación",
+    descripcion="Restaura puntos de vida al usarse.",
+    tipo="consumible",
+    efectos={"vida": 25},     # +25 HP (sin superar vida máxima)
+    valor=20
+)
+
+talisman = Objeto(
+    nombre="Talismán Sombrío",
+    descripcion="Aumenta la vida máxima del portador.",
+    tipo="equipable",
+    efectos={"vida_max": 60},  # +60 vida máxima
+    valor=150
+)
 
 objetos = [
     espada,
@@ -175,7 +202,11 @@ objetos = [
 
 inventario_salvi = Inventario(oro=100, objetos=[])
 inventario_salvi.agregar_objeto(pocion)
+inventario_salvi.agregar_objeto(pocion)
+inventario_salvi.agregar_objeto(pocion)
+inventario_salvi.agregar_objeto(pocion)
 inventario_salvi.agregar_objeto(arco)
+inventario_salvi.agregar_objeto(talisman)
 
 inventario_jorjito = Inventario(oro=150, objetos=[])
 inventario_jorjito.agregar_objeto(espada)
@@ -187,24 +218,30 @@ ShadoWSalvi = Jugador(
     nombre="ShadoWSalvi",
     nivel=1,
     salud=100,
+    salud_maxima= 100,
     mana=80,
+    mana_maxima=80,
     clase_personaje=cazador,
     inventario=inventario_salvi,
     nombre_usuario="ShadowUser",
     experiencia=0,
-    defensa=15
+    defensa=15,
+    ataque= 15
 )
 
 Jorjito = Jugador(
     nombre="Jorjito",
     nivel=1,
     salud=120,
+    salud_maxima=120,
     mana=60,
+    mana_maxima=60,
     clase_personaje=paladin,
     inventario=inventario_jorjito,
     nombre_usuario="JorjitoPal",
     experiencia=0,
-    defensa=20
+    defensa=20,
+    ataque= 10
 )
 
 #Lista de jugadores 
@@ -221,33 +258,42 @@ lobo_feroz = Enemigo(
     nombre="Lobo Feroz",
     nivel=5,
     salud=20,
+    salud_maxima=20,
     mana=20,
+    mana_maxima=20,
     clase_personaje=guerrero, 
     inventario=Inventario(oro=0, objetos=[]),
     tipo_enemigo="común",
-    recompensa_experiencia=50
+    recompensa_experiencia=50,
+    rango_oro=[5,10]
 )
 
 trol_bosque = Enemigo(
     nombre="Trol del Bosque",
     nivel=7,
-    salud=20,
+    salud=70,
+    salud_maxima=70,
     mana=30,
+    mana_maxima=30,
     clase_personaje=guerrero,
     inventario=Inventario(oro=0, objetos=[]),
     tipo_enemigo="raro",
-    recompensa_experiencia=80
+    recompensa_experiencia=80,
+    rango_oro=[15,30]
 )
 
 nigromante = Enemigo(
     nombre="Nigromante Oscuro",
     nivel=10,
-    salud=20,
+    salud=100,
+    salud_maxima=100,
     mana=80,
+    mana_maxima=80,
     clase_personaje=mago,
     inventario=Inventario(oro=0, objetos=[]),
     tipo_enemigo="épico",
-    recompensa_experiencia=150
+    recompensa_experiencia=150,
+    rango_oro=[50,60]
 )
 
 enemigos = [

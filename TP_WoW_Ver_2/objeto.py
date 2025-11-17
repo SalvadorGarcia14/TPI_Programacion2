@@ -1,12 +1,15 @@
+from typing import Dict
 import random
 import string
 
 class Objeto():
-    def __init__(self, nombre: str, descripcion: str, valor: int):
+    def __init__(self, nombre: str, descripcion: str, tipo: str, efectos: Dict ,valor: int):
         
         self.__id_objeto = Objeto.generador_aleatorios_id_obejtos()
         
         self.__nombre = nombre
+        self.__tipo = tipo
+        self.__efectos = efectos
         self.__descripcion = descripcion
         self.__valor = valor
     
@@ -21,6 +24,17 @@ class Objeto():
     @nombre.setter
     def nombre(self, nuevo_nombre: str):
         self.__nombre = nuevo_nombre
+    
+    @property
+    def tipo(self) -> str:
+        return self.__tipo
+    @tipo.setter
+    def tipo(self, nuevo_tipo: str):
+        self.__tipo = nuevo_tipo
+
+    @property
+    def efectos(self) -> Dict:
+        return self.__efectos
     
     @property
     def descripcion(self) -> str:
