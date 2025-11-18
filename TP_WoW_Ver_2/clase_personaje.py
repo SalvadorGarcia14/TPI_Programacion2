@@ -31,22 +31,22 @@ class ClasePersonaje():
     def nombre(self) -> str:
         return self.__nombre
     @nombre.setter
-    def nombre(self, nombre: str):
-        self.__nombre = nombre
+    def nombre(self, nuevo_nombre: str):
+        self.__nombre = nuevo_nombre
     
     @property
     def rol(self) -> str:
         return self.__rol
     @rol.setter
-    def rol(self, rol: str):
-        self.__rol = rol
+    def rol(self, nuevo_rol: str):
+        self.__rol = nuevo_rol
     
     @property
     def poder_base(self) -> int:
         return self.__poder_base
     @poder_base.setter  
-    def poder_base(self, poder_base: int):
-        self.__poder_base = poder_base
+    def poder_base(self, nuevo_poder_base: int):
+        self.__poder_base = nuevo_poder_base
     
     @property
     def habilidades(self) -> List[Habilidad]:

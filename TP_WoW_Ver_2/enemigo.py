@@ -64,6 +64,15 @@ class Enemigo(Personaje):
     def calcular_experiencia_nivel(self):
         return 0
 
+    def esta_vivo(self) -> bool:
+        return self.salud > 0
+
+    def agregar_objeto_inventario(self, objeto) -> None:
+        return None
+
+    def mostrar_inventario(self) -> None:
+        return None
+
     def calcular_recompensa(self) -> tuple[int, int]:
         # EXP
         nivel_factor = self.nivel * 10

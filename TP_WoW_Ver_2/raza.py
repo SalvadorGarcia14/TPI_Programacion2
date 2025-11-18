@@ -15,11 +15,11 @@ class Raza():
         self.__nombre = nombre
 
     @property
-    def bando(self):
+    def bando(self) -> str:
         return self.__bando
     @bando.setter   
-    def bando(self, bando):
-        self.__bando = bando
+    def bando(self, nuevo_bando) -> str:
+        self.__bando = nuevo_bando
     
     @property
     def clases_disponibles(self) -> List[ClasePersonaje]:

@@ -8,7 +8,7 @@ from habilidad import Habilidad
 
 class Personaje(ABC):
 
-    _contador_id_personajes = 0  # Atributo de clase para llevar el conteo de instancias
+    _contador_id_personajes = 0 
     
     def __init__(self, nombre: str, nivel: int, salud: int,salud_maxima: int ,mana: int, mana_maxima: int,
                 clase_personaje: ClasePersonaje, inventario: Inventario):
@@ -110,14 +110,20 @@ class Personaje(ABC):
         """Calcula la experiencia necesaria para subir de nivel"""
         pass
     
+    @abstractmethod
     def esta_vivo(self) -> bool:
-        return self.salud > 0 #Indica si el personaje sigue con vida.
-    
+        """Retorna True si el personaje tiene salud > 0."""
+        pass
+
+    @abstractmethod
     def agregar_objeto_inventario(self, objeto):
-        return self.inventario.agregar_objeto(objeto)
-    
+        """Agrega un objeto al inventario."""
+        pass
+
+    @abstractmethod
     def mostrar_inventario(self) -> List[str]:
-        return self.inventario.mostrar_objetos()        
+        """Devuelve una lista con los nombres de los objetos."""
+        pass   
     
     def __str__(self):
         habilidades_nombres = []

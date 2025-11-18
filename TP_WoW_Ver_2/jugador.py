@@ -141,6 +141,15 @@ class Jugador(Personaje):
             mensaje += f"{self.nombre} ya ha alcanzado el nivel máximo {self.nivel_maximo}.\n"
 
         return mensaje
+
+    def esta_vivo(self) -> bool:
+        return self.salud > 0
+
+    def agregar_objeto_inventario(self, objeto):
+        return self.inventario.agregar_objeto(objeto)
+
+    def mostrar_inventario(self) -> List[str]:
+        return self.inventario.mostrar_objetos()
     
     def ganar_oro(self, cantidad):
         self.inventario.modificar_oro(cantidad)
