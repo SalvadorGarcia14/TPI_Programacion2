@@ -17,9 +17,7 @@ class Bando():
     @property
     def razas(self) -> List[Raza]:
         return self.__razas
-    @razas.setter
-    def razas(self, nuevas_razas:List[Raza]):
-        self.__razas = nuevas_razas
+
 
     def agregar_raza(self, nombre_raza):
         raza = Raza(nombre_raza, self)

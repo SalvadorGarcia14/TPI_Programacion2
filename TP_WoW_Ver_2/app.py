@@ -222,7 +222,7 @@ def seleccionar_objeto(jugador_activo):
 
 def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la lista de jugadores.
     print("======================================================================")
-    print("      Bienvenido a WORLD OF PYTHONCRAFT  v1.0       ")
+    print("      Bienvenido a WORLD OF PYTHONCRAFT  v1.2       ")
     print("======================================================================")
     print("Proyecto basado en POO y UML estilo WoW\n")
 
@@ -365,7 +365,7 @@ def crear_nuevo_personaje(nombre_usuario):
         return None
 
     limpiar_pantalla()
-    print(f"Has elegido el bando: {bando_elegido}\n")
+    print(f"Has elegido el bando: {bando_elegido.nombre}\n")
 
     # Filtra razas por bando
     razas_disponibles = []
@@ -407,12 +407,15 @@ def crear_nuevo_personaje(nombre_usuario):
         nombre=nombre_personaje,
         nivel=1,
         salud=100,
+        salud_maxima=100,
         mana=80,
+        mana_maxima=100,
         clase_personaje=clase_elegida,
         inventario=nuevo_inventario,
         nombre_usuario=nombre_usuario,
         experiencia=0,
-        defensa=10
+        defensa=10,
+        ataque=10,
     )
     
     
@@ -438,7 +441,7 @@ def main():
 
     while True:
         limpiar_pantalla()
-        print(f"=== WORLD OF PYTHONCRAFT v1.0 ===")
+        print(f"=== WORLD OF PYTHONCRAFT v1.2 ===")
         print(f"Jugador: {jugador_activo.nombre} | Nivel {jugador_activo.nivel}")
         print(f"Usuario: {jugador_activo.nombre_usuario} | Clase: {jugador_activo.clase_personaje.nombre}\n")
         print("1 -> Iniciar Combate \n")

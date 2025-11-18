@@ -7,6 +7,7 @@
 
 from habilidad import Habilidad
 from clase_personaje import ClasePersonaje
+from bando import Bando
 from raza import Raza
 from jugador import Jugador
 from enemigo import Enemigo
@@ -15,8 +16,8 @@ from inventario import Inventario
 
 
 #Bandos
-alianza = "Alianza"
-horda = "Horda"
+alianza = Bando("Alianza")
+horda = Bando("Horda")
 
 # Habilidades
 
@@ -135,7 +136,7 @@ clases_personaje = [
     paladin,
     brujo,
     chaman
-]
+]   
 
 
 # Razas
