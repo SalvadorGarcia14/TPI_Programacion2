@@ -265,7 +265,7 @@ def manejar_objetos_perdidos(jugador_activo):
 def submenu_mercado(jugador_activo):
 
     while True:
-        print("\n=== MERCADO ===")
+        print("=== MERCADO === \n")
         print(f"Oro disponible: {jugador_activo.inventario.oro}")
         print("Objetos en inventario:")
 
