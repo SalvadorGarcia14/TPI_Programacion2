@@ -61,6 +61,10 @@ class Enemigo(Personaje):
         """Restablece la salud del enemigo a la máxima."""
         self.salud = self.salud_maxima
     
+    def resetear_mana(self):
+        """Restablece el mana del enemigo a la máxima."""
+        self.mana = self.mana_maxima
+    
     def calcular_experiencia_nivel(self):
         return 0
 

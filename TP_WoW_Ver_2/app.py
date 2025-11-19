@@ -72,6 +72,7 @@ def submenu_combate(jugador_activo):
         if opcion == "1":
             enemigo = random.choice(enemigos)
             enemigo.resetear_salud()  # ✅ Resetea su salud antes de pelear
+            enemigo.resetear_mana() 
             jugador_activo.resetear_mana()
             print(f"¡Has encontrado un {enemigo.nombre} de nivel {enemigo.nivel}!\n")
             combate(jugador_activo, enemigo)
@@ -173,7 +174,10 @@ def combate(jugador_activo, enemigo):
             if not jugador_activo.esta_vivo():
                 print(f" {jugador_activo.nombre} ha muerto en combate. \n")
                 pausar()
-                return
+            if not jugador_activo.esta_vivo():
+                print("Tu personaje ha muerto! \n")
+                manejar_objetos_perdidos(jugador_activo)
+                break
 
             turno_jugador = True
             time.sleep(1.5)
@@ -186,7 +190,7 @@ def seleccionar_objeto(jugador_activo):
         return
     
     while True:
-        print("\nObjetos disponibles:")
+        print("Objetos disponibles: \n")
         for i, objeto in enumerate(objetos, start=1):
             print(f"{i} -> {objeto}")
 
@@ -211,11 +215,93 @@ def seleccionar_objeto(jugador_activo):
             jugador_activo.inventario.usar_objeto(jugador_activo, opcion - 1)
             return
         else:
-            print("Opción inválida, selecciona un número correcto.")
+            print("Opción inválida, selecciona un número correcto \n")
 
             
+# Función maneja la perdida de objetos del Inventario                
+def manejar_objetos_perdidos(jugador_activo):
+    inventario_original = jugador_activo.inventario.objetos.copy() # Guardamos una copia de seguridad del inventario
+
+    jugador_activo.inventario.objetos.clear()
+    print("Todos tus objetos se han perdido durante el combate... \n") # Vaciar inventario completamente
+
+    while True:
+        print("=== Objetos Perdidos === \n")
+        print("1. Buscar los objetos perdidos")
+        print("2. Seguir sin los objetos")
+        opcion = input("Elige una opción: ")
+
+        if opcion == "1":
+            print("\nBuscando objetos perdidos...")
+            time.sleep(2)  # Simula búsqueda
+            
+            jugador_activo.inventario.objetos.clear()
+            jugador_activo.inventario.objetos.extend(inventario_original)            
+            print("¡Has encontrado todos tus objetos perdidos!")
+
+            jugador_activo.salud = jugador_activo.salud_maxima
+            jugador_activo.mana = jugador_activo.mana_maxima
+
+            print("Tu personaje ha revivido completamente: \n")
+            return
+
+        elif opcion == "2":
+            print("\nHas decidido seguir sin los objetos perdidos.")
+            # --- REVIVIR AL JUGADOR ---
+            jugador_activo.salud = jugador_activo.salud_maxima
+            jugador_activo.mana = jugador_activo.mana_maxima
+
+            print("Tu personaje ha revivido completamente: \n")
+            return
+        
+        else:
+            print("Opción incorrecta.")
+        
+
                     
 # ===============================================
+
+
+def submenu_mercado(jugador_activo):
+
+    while True:
+        print("\n=== MERCADO ===")
+        print(f"Oro disponible: {jugador_activo.inventario.oro}")
+        print("Objetos en inventario:")
+
+        objetos = jugador_activo.inventario.objetos
+
+        if not objetos:
+            print("No tienes objetos para vender.")
+            input("Presiona ENTER para volver...")
+            return
+
+        for i, objeto in enumerate(objetos, start=1):
+            print(f"[{i}] - {objeto.nombre} (Valor: {objeto.valor} oro)")
+
+        print("0. Volver")
+        
+        opcion = input("Selecciona un objeto para vender: \n")
+
+        if opcion == "0":
+            return
+
+        if not opcion.isdigit() or not (1 <= int(opcion) <= len(objetos)):
+            print("Opción inválida.")
+            continue
+
+        objeto_seleccionado = objetos[int(opcion) - 1]
+        confirmado = input(f"¿Quieres vender '{objeto_seleccionado.nombre}' por {objeto_seleccionado.valor} oro? (s/n): ").lower()
+        if confirmado == "s":
+            jugador_activo.inventario.oro += objeto_seleccionado.valor
+            jugador_activo.inventario.objetos.remove(objeto_seleccionado)
+            print(f"Vendiste {objeto_seleccionado.nombre} y recibiste {objeto_seleccionado.valor} oro.")
+        else:
+            print("Venta cancelada.")
+
+
+# ===============================================
+
 
 
 #Funciones Principal
@@ -445,14 +531,15 @@ def main():
         print(f"Jugador: {jugador_activo.nombre} | Nivel {jugador_activo.nivel}")
         print(f"Usuario: {jugador_activo.nombre_usuario} | Clase: {jugador_activo.clase_personaje.nombre}\n")
         print("1 -> Iniciar Combate \n")
-        print("2 -> Mostrar Jugadores")
-        print("3 -> Mostrar Enemigos")
-        print("4 -> Mostrar Clases")
-        print("5 -> Mostrar Razas")
-        print("6 -> Mostrar Objetos")
-        print("7 -> Seleccionar Personaje")
-        print("8 -> Crear Nuevo Personaje")
-        print("9 -> Salir")
+        print("2 -> Mercado \n")
+        print("3 -> Mostrar Jugadores")
+        print("4 -> Mostrar Enemigos")
+        print("5 -> Mostrar Clases")
+        print("6 -> Mostrar Razas")
+        print("7 -> Mostrar Objetos")
+        print("8 -> Seleccionar Personaje")
+        print("9 -> Crear Nuevo Personaje")
+        print("0 -> Salir")
 
         opcion = input("Elige una opción: \n")
 
@@ -460,30 +547,32 @@ def main():
             submenu_combate(jugador_activo)
             pausar()
         elif opcion == "2":
+            submenu_mercado(jugador_activo)
+        elif opcion == "3":
             mostrar_jugadores()
             pausar()
-        elif opcion == "3":
+        elif opcion == "4":
             mostrar_enemigos()
             pausar()
-        elif opcion == "4":
+        elif opcion == "5":
             mostrar_clases()
             pausar()
-        elif opcion == "5":
+        elif opcion == "6":
             mostrar_razas()
             pausar()
-        elif opcion == "6":
+        elif opcion == "7":
             mostrar_objetos()
             pausar()
-        elif opcion == "7":
+        elif opcion == "8":
             nuevo_personaje = seleccionar_personaje(jugadores, jugador_activo.nombre_usuario)
             if nuevo_personaje is not None:
                 jugador_activo = nuevo_personaje
             else:
                 print("No se seleccionó ningún personaje. Se mantiene el actual. \n")
                 pausar()        
-        elif opcion == "8":
-            crear_nuevo_personaje(jugador_activo.nombre_usuario)
         elif opcion == "9":
+            crear_nuevo_personaje(jugador_activo.nombre_usuario)
+        elif opcion == "0":
             print("¡Gracias por jugar World of Pythoncraft! \n")
             pausar()
             iniciar_sesion()
