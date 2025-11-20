@@ -259,24 +259,28 @@ jugadores = [
 #Habilidades Enemigas
 
 #Habilidad de Lobo Feroz
-mordida = Habilidad("Mordida", "Física", 5, 10) #0
-zarpa = Habilidad("Zarpazo", "Fisica", 10, 12)#1
-salgo_zarpa = Habilidad("Salto Zarpa", "Fisica" ,5, 6)#2
+ataque_basico_lobo = Habilidad("Ataque Basico de Lobo", "Fisica", 0, 10) #0
+mordida = Habilidad("Mordida", "Física", 5, 10) #1
+zarpa = Habilidad("Zarpazo", "Fisica", 10, 12)#2
+salgo_zarpa = Habilidad("Salto Zarpa", "Fisica" ,5, 6)#3
 
 #Habilidad de Troll del Bosque
-lanzar_hacha = Habilidad("Lanzar Hacha", "Física", 10, 20) #3
-aturdir = Habilidad("Aturdir", "Física", 10, 10) #4
-ataque_multiple = Habilidad("Ataques Multiples", "Fisica", 15, 25) #5
+ataque_basico_troll= Habilidad("Ataque Basico de Troll del Bosque", "Fisica", 0, 15) #4
+lanzar_hacha = Habilidad("Lanzar Hacha", "Física", 10, 20) #5
+aturdir = Habilidad("Aturdir", "Física", 10, 10) #6
+ataque_multiple = Habilidad("Ataques Multiples", "Fisica", 15, 25) #7
 
 #Habilidad Nigromante
-miedo = Habilidad("Lanzar Miedo","Sombras", 5, 10) #6
-levantar_muertos = Habilidad("Levantar Muertos", "Sombras", 10, 15) #7
-explosion_vil = Habilidad("Explocion Oscura", "Sombras", 20, 40) #8
+ataque_basico_nigromante= Habilidad("Ataque Basico de Nigromante", "Fisica", 0, 12) #8
+miedo = Habilidad("Lanzar Miedo","Sombras", 5, 10) #9
+levantar_muertos = Habilidad("Levantar Muertos", "Sombras", 10, 15) #10
+explosion_oscura = Habilidad("Explocion Oscura", "Sombras", 20, 40) #11
 
 #Habilidad Dragon Rojo
-vuelo_poderoso = Habilidad("Vuelo Poderoso", "Fisica", 10, 20)
-aliento_fuego = Habilidad("Aliento de Fuego Destructivo", "Elemental", 20, 60)
-aliento_final = Habilidad("Aliento de Fuego Final", "Elemental", 30, 90)
+ataque_basico_dragon= Habilidad("Ataque Basico de Dragon Rojo", "Fisica", 0, 40) #12
+vuelo_poderoso = Habilidad("Vuelo Poderoso", "Fisica", 10, 20) #13
+aliento_fuego = Habilidad("Aliento de Fuego Destructivo", "Elemental", 20, 60) #14
+aliento_final = Habilidad("Aliento de Fuego Final", "Elemental", 30, 90) #15
 
 #Agregar habilidades
 
@@ -284,31 +288,35 @@ habilidades_enemigas = [
     
 ]
 #Lobo Feroz
-habilidades_enemigas.append(mordida) #0
-habilidades_enemigas.append(zarpa) #1
-habilidades_enemigas.append(salgo_zarpa) #2
+habilidades_enemigas.append(ataque_basico_lobo)#0
+habilidades_enemigas.append(mordida) #1
+habilidades_enemigas.append(zarpa) #2
+habilidades_enemigas.append(salgo_zarpa) #3
 
 #Troll del Bosque
-habilidades_enemigas.append(lanzar_hacha) #3
-habilidades_enemigas.append(aturdir) #4
-habilidades_enemigas.append(ataque_multiple) #5
+habilidades_enemigas.append(ataque_basico_troll) #4
+habilidades_enemigas.append(lanzar_hacha) #5
+habilidades_enemigas.append(aturdir) #6
+habilidades_enemigas.append(ataque_multiple) #7
 
 #Nigromante
-habilidades_enemigas.append(miedo) #6
-habilidades_enemigas.append(levantar_muertos) #7
-habilidades_enemigas.append(explosion_vil) #8
+habilidades_enemigas.append(ataque_basico_nigromante) #8
+habilidades_enemigas.append(miedo) #9
+habilidades_enemigas.append(levantar_muertos) #10
+habilidades_enemigas.append(explosion_oscura) #11
 
 #Dragon Rojo
-habilidades_enemigas.append(vuelo_poderoso) #9
-habilidades_enemigas.append(aliento_fuego) #10
-habilidades_enemigas.append(aliento_final) #11
+habilidades_enemigas.append(ataque_basico_dragon) #12
+habilidades_enemigas.append(vuelo_poderoso) #13
+habilidades_enemigas.append(aliento_fuego) #14
+habilidades_enemigas.append(aliento_final) #15
 
 #Clase Enemigos
 
-guerrero_enemigo_lobo = ClasePersonaje("Guerrero Lobo Feroz", "Taks", 15, habilidades_enemigas[0: 3])
-guerrero_troll_del_bosque = ClasePersonaje("Guerrero Troll Del Bosque", "DPS", 20, habilidades_enemigas[3: 6])
-mago_nigromante = ClasePersonaje("Nigromante", "DPS", 20, habilidades_enemigas[6 : 9])
-dragon_rojo_unico = ClasePersonaje("Dragon Rojo", "DPS/Tank", 20,habilidades_enemigas[9: 12] )
+guerrero_enemigo_lobo = ClasePersonaje("Guerrero Lobo Feroz", "Taks", 15, habilidades_enemigas[0: 4])
+guerrero_troll_del_bosque = ClasePersonaje("Guerrero Troll Del Bosque", "DPS", 20, habilidades_enemigas[4: 8])
+mago_nigromante = ClasePersonaje("Nigromante", "DPS", 20, habilidades_enemigas[8 : 12])
+dragon_rojo_unico = ClasePersonaje("Dragon Rojo", "DPS/Tank", 20,habilidades_enemigas[12 : 16] )
 
 
 # Enemigos Precargados
@@ -389,6 +397,10 @@ enemigos = [
 ]
 
 """
+
+for enemigo in enemigos:
+    print(f"{enemigo} -> {enemigo.habilidades}")
+
     
 for enemigo in enemigos:
     print(enemigo)
