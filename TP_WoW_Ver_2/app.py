@@ -59,7 +59,7 @@ def mostrar_objetos():
 # Combate
 
 
-def submenu_combate(jugador_activo):
+def submenu_combate(jugador_activo): #Bucle principal del menú de combate
     while True:
         print(f"\n=== Modo Combate - {jugador_activo.nombre} ===")
         print("1. Buscar Enemigo Aleatorio")
@@ -71,7 +71,7 @@ def submenu_combate(jugador_activo):
 
         if opcion == "1":
             enemigo = random.choice(enemigos)
-            enemigo.resetear_salud()  # ✅ Resetea su salud antes de pelear
+            enemigo.resetear_salud()  # Resetea su salud antes de pelear
             enemigo.resetear_mana() 
             jugador_activo.resetear_mana()
             print(f"¡Has encontrado un {enemigo.nombre} de nivel {enemigo.nivel}!\n")
@@ -94,10 +94,11 @@ def combate(jugador_activo, enemigo):
     limpiar_pantalla()
     print(f"⚔️ ¡Combate iniciado entre {jugador_activo.nombre} y {enemigo.nombre}!\n")
     
-    # Controla quién ataca
+    # Banderas - Controla quién ataca
     turno_jugador = True 
     enemigo_vivo = True
     
+    #Controla cuando muere uno o el jugador huye
     while jugador_activo.esta_vivo() and enemigo_vivo:
         print(f"\n{jugador_activo.nombre}: {jugador_activo.salud} HP | Daño Basico: {jugador_activo.ataque} |Mana: {jugador_activo.mana}")
         print(f"{enemigo.nombre}: {enemigo.salud} HP | Mana: {enemigo.mana}\n")
@@ -114,7 +115,7 @@ def combate(jugador_activo, enemigo):
                 # Ataque básico, primera habilidad de las clases
                 print("---Ataque Basico ---\n")
                 habilidad_basica = jugador_activo.clase_personaje.habilidades[0]
-                print(jugador_activo.atacar(enemigo, habilidad_basica))
+                print(jugador_activo.atacar(enemigo, habilidad_basica)) # Muestra el resultado
             
             elif opcion == "2":
                 print("--- Habilidades disponibles ---\n")
@@ -124,6 +125,7 @@ def combate(jugador_activo, enemigo):
                     print(f"{i + 1} - {habilidad}")
         
                 eleccion = input("Elige habilidad: ")
+                #Verifica tipo num y el rango
                 if eleccion.isdigit():
                     indice = int(eleccion) - 1
         
@@ -150,6 +152,7 @@ def combate(jugador_activo, enemigo):
                 print(f"{enemigo.nombre} ha sido derrotado. \n")
                 enemigo_vivo = False
 
+                #Calcula recompensa
                 exp, oro = enemigo.calcular_recompensa()
                 print(jugador_activo.ganar_experiencia(exp))
                 
@@ -170,21 +173,25 @@ def combate(jugador_activo, enemigo):
             print(f"=== Turno de {enemigo.nombre} === \n")
             habilidad_enemiga = random.choice(enemigo.clase_personaje.habilidades)
             print(enemigo.atacar(jugador_activo, habilidad_enemiga))
-
+            
+            # Verifica muerte del jugador
             if not jugador_activo.esta_vivo():
                 print(f" {jugador_activo.nombre} ha muerto en combate. \n")
                 pausar()
             if not jugador_activo.esta_vivo():
                 print("Tu personaje ha muerto! \n")
+                #Maneja pérdida de objetos y revive
                 manejar_objetos_perdidos(jugador_activo)
                 break
-
+            
+            #Cambia al turno del jugador
             turno_jugador = True
             time.sleep(1.5)
 
 # Función para usar objetos
 def seleccionar_objeto(jugador_activo):
     objetos = jugador_activo.inventario.objetos
+    #Verifica que existan objetos
     if not objetos:
         print("No tienes objetos para usar.")
         return
@@ -212,7 +219,7 @@ def seleccionar_objeto(jugador_activo):
 
         # Vlida rango correcto
         if 1 <= opcion <= len(objetos):
-            jugador_activo.inventario.usar_objeto(jugador_activo, opcion - 1)
+            jugador_activo.inventario.usar_objeto(jugador_activo, opcion - 1) # Llama al método del inventario y aplica el efecto
             return
         else:
             print("Opción inválida, selecciona un número correcto \n")
@@ -221,7 +228,8 @@ def seleccionar_objeto(jugador_activo):
 # Función maneja la perdida de objetos del Inventario                
 def manejar_objetos_perdidos(jugador_activo):
     inventario_original = jugador_activo.inventario.objetos.copy() # Guardamos una copia de seguridad del inventario
-
+    
+    # El inventario se vacía completamente al morir
     jugador_activo.inventario.objetos.clear()
     print("Todos tus objetos se han perdido durante el combate... \n") # Vaciar inventario completamente
 
@@ -235,10 +243,9 @@ def manejar_objetos_perdidos(jugador_activo):
             print("\nBuscando objetos perdidos...")
             time.sleep(2)  # Simula búsqueda
             
-            jugador_activo.inventario.objetos.clear()
-            jugador_activo.inventario.objetos.extend(inventario_original)            
+            jugador_activo.inventario.objetos.extend(inventario_original) # Restaura todos los objetos de la copia de seguridad       
             print("¡Has encontrado todos tus objetos perdidos!")
-
+            # --- REVIVIR AL JUGADOR ---
             jugador_activo.salud = jugador_activo.salud_maxima
             jugador_activo.mana = jugador_activo.mana_maxima
 
@@ -266,11 +273,12 @@ def submenu_mercado(jugador_activo):
 
     while True:
         print("=== MERCADO === \n")
-        print(f"Oro disponible: {jugador_activo.inventario.oro}")
+        print(f"Oro disponible: {jugador_activo.inventario.oro}") #Oro actual del jugador
         print("Objetos en inventario:")
 
-        objetos = jugador_activo.inventario.objetos
+        objetos = jugador_activo.inventario.objetos #Obtiene el inventariod
 
+        #Verifica
         if not objetos:
             print("No tienes objetos para vender.")
             input("Presiona ENTER para volver...")
@@ -285,7 +293,8 @@ def submenu_mercado(jugador_activo):
 
         if opcion == "0":
             return
-
+        
+        #Valida tipo numerico y el rango
         if not opcion.isdigit() or not (1 <= int(opcion) <= len(objetos)):
             print("Opción inválida.")
             continue
@@ -293,8 +302,8 @@ def submenu_mercado(jugador_activo):
         objeto_seleccionado = objetos[int(opcion) - 1]
         confirmado = input(f"¿Quieres vender '{objeto_seleccionado.nombre}' por {objeto_seleccionado.valor} oro? (s/n): ").lower()
         if confirmado == "s":
-            jugador_activo.inventario.oro += objeto_seleccionado.valor
-            jugador_activo.inventario.objetos.remove(objeto_seleccionado)
+            jugador_activo.inventario.oro += objeto_seleccionado.valor #Suma el oro del objeto al inventario
+            jugador_activo.inventario.objetos.remove(objeto_seleccionado) #Y elimina el objeto del inventario
             print(f"Vendiste {objeto_seleccionado.nombre} y recibiste {objeto_seleccionado.valor} oro.")
         else:
             print("Venta cancelada.")
@@ -319,14 +328,16 @@ def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la li
         
         opcion = input("Elegi una opcion: ")
         
+        #Iniciar sesión con un usuario existente
         if opcion == "1":
 
             nombre_usuario_ingresado = input("Ingrese su nombre de usuario: ")
 
+            #bandera y busqueda de user
             usuario_valido = None
             for jugador in jugadores:
                 if jugador.nombre_usuario == nombre_usuario_ingresado:
-                    usuario_valido = jugador
+                    usuario_valido = jugador #Retorna el objeto jugador
                     break
 
             if usuario_valido:
@@ -346,7 +357,7 @@ def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la li
             # Verificar si el nombre ya existe
             existe = False
             for jugador in jugadores:
-                if jugador.nombre_usuario == nuevo_usuario:  # <-- aquí era jugador.nombre, debería ser nombre_usuario
+                if jugador.nombre_usuario == nuevo_usuario:
                     existe = True
                     break
     
@@ -358,7 +369,8 @@ def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la li
             print(f"Usuario '{nuevo_usuario}' registrado con éxito. \n")
             pausar()
             nuevo_personaje = crear_nuevo_personaje(nuevo_usuario)
-    
+
+            #Si se creo correctamente, retorna el nuevo jugador y inicia el main
             if nuevo_personaje:
                 print(f"¡Bienvenido {nuevo_personaje.nombre}! Tu aventura comienza ahora. \n")
                 pausar()
@@ -376,27 +388,6 @@ def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la li
             print("Opción inválida. Intenta nuevamente.\n")
 
     
-# def iniciar_sesion(): #Solicita el nombre de usuario y valida si existe en la lista de jugadores.
-#     print("======================================================================")
-#     print("      Bienvenido a WORLD OF PYTHONCRAFT  v1.0       ")
-#     print("======================================================================")
-#     print("Proyecto basado en POO y UML estilo WoW\n")
-    
-#     nombre_usuario_ingresado = input("Ingrese su nombre de usuario para iniciar sesión: ")
-    
-#     usuario_valido = None
-#     for jugador in jugadores:
-#         if jugador.nombre_usuario == nombre_usuario_ingresado:
-#             usuario_valido = jugador
-#             break
-    
-#     if usuario_valido:
-#         print(f"\n✅ Bienvenido {usuario_valido.nombre} ({usuario_valido.nombre_usuario})\n")
-#         return usuario_valido
-#     else:
-#         print("\n❌ Usuario no encontrado. Intente nuevamente.\n")
-#         return None
-
 #Seleccion de personaje
 def seleccionar_personaje(jugadores, nombre_usuario):
     """Permite seleccionar un personaje entre los del usuario."""
@@ -441,60 +432,74 @@ def crear_nuevo_personaje(nombre_usuario):
     print("1 - Alianza")
     print("2 - Horda")
     opcion_bando = input("Opción: ")
-
+    
+    #Elegimos el bando (Alianza o Horda)
     if opcion_bando == "1":
         bando_elegido = alianza
     elif opcion_bando == "2":
         bando_elegido = horda
     else:
-        print("❌ Opción inválida.")
+        print(" Opción inválida.")
         return None
 
     limpiar_pantalla()
     print(f"Has elegido el bando: {bando_elegido.nombre}\n")
 
+    #Elegimos la raza
     # Filtra razas por bando
     razas_disponibles = []
     for raza in razas:
-        if raza.bando == bando_elegido:
+        if raza.bando == bando_elegido: # Compara referencias al objeto bando
             razas_disponibles.append(raza)
 
     print("Elige tu raza:")
     for i, raza in enumerate(razas_disponibles):
         print(f"{i + 1} - {raza.nombre}")
+    print("0 -> Volver a elegir bando")
     eleccion_raza = input("Opción: ")
-
+    if eleccion_raza == "0": #Reinicia 
+        crear_nuevo_personaje(nombre_usuario)
+    
+    #Valida de tupo numerico y rango
     if not eleccion_raza.isdigit() or not (1 <= int(eleccion_raza) <= len(razas_disponibles)):
-        print("❌ Opción inválida.")
+        print("Opción inválida.")
         return None
     raza_elegida = razas_disponibles[int(eleccion_raza) - 1]
     limpiar_pantalla()
     print(f"Has elegido la raza: {raza_elegida.nombre}\n")
     
-    
+    #Seleccionamos la clase segun la raza elegida
     print("Elige tu clase:")
     for i, clase in enumerate(raza_elegida.clases_disponibles):
         print(f"{i + 1} - {clase.nombre}")
+    print("0 -> Volver a elegir bando")
     eleccion_clase = input("Opción: ")
+    
+    if eleccion_clase == "0": #Reinicia 
+        crear_nuevo_personaje(nombre_usuario)
+    
+    #Valida de tupo numerico y rango
     if not eleccion_clase.isdigit() or not (1 <= int(eleccion_clase) <= len(raza_elegida.clases_disponibles)):
-        print("❌ Opción inválida.")
+        print(" Opción inválida.")
         return None
     clase_elegida = raza_elegida.clases_disponibles[int(eleccion_clase) - 1]
     limpiar_pantalla()
     print(f"Has elegido la clase: {clase_elegida.nombre}\n")
     
+    #Nombre del personaje
     nombre_personaje = input("Escribe el nombre de tu nuevo personaje: ").strip()
     if not nombre_personaje:
         print("❌ Nombre inválido.")
         return None
     
+    #Creamos el objeto Inventario del personaje y el objeto Jugador
     nuevo_inventario = Inventario(oro=50, objetos=[])
     nuevo_personaje = Jugador(
         nombre=nombre_personaje,
         nivel=1,
         salud=100,
         salud_maxima=100,
-        mana=80,
+        mana=100,
         mana_maxima=100,
         clase_personaje=clase_elegida,
         inventario=nuevo_inventario,
@@ -505,16 +510,18 @@ def crear_nuevo_personaje(nombre_usuario):
     )
     
     
-    jugadores.append(nuevo_personaje)
+    jugadores.append(nuevo_personaje) #Agregmaos el jugador a la lista
     print(f"\n✅ ¡Personaje '{nombre_personaje}' creado con éxito!")
     print(f"Bando: {bando_elegido} | Raza: {raza_elegida.nombre} | Clase: {clase_elegida.nombre}")
-    print("Podrás seleccionarlo desde la opción 7 -> Seleccionar Personaje.")
+    print("Podrás seleccionarlo desde la opción 8 -> Seleccionar Personaje.")
 
     pausar()
     return nuevo_personaje
 
 
 
+# ===============================================
+# ===============================================
 
 
 #menú principal

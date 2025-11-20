@@ -313,3 +313,91 @@ def obtener_datos_precargados(): #Devuelve todas las colecciones del juego.
         "enemigos": enemigos,
         "objetos": [espada, arco, pocion, talisman]
     }
+
+ 
+# ====================================================
+
+#=================== TEST ===========================
+
+
+"""
+
+
+print("=" * 20)
+#Crosover 
+
+clases_pokemon = []
+
+#Bando
+pokemon = Bando("Pokemon")
+
+#Razas
+pokemon = Bando("Pokemon")
+
+#Agregar nueva raza
+
+pokemos = Raza("Pokemos", None, clases_pokemon)
+
+pokemos.agregar_bando_a_la_raza(pokemon)
+
+print(pokemos)
+
+
+
+#habilidades 
+
+inpactrueno = Habilidad("Inpactrueno", "Rayo", 10, 10)
+curacion = Habilidad("Curacion", "healer", 5, 0)
+salto_trueno = Habilidad("Salto Trueno", "esquivar", 5, 0)
+
+
+habilidades_pokemon = [
+    
+]
+
+
+tipo_electrico = ClasePersonaje("Tipo Electrico", "DPS",  10, habilidades_pokemon) 
+
+tipo_electrico.agregar_habilidad(ataque_basico)
+tipo_electrico.agregar_habilidad(inpactrueno)
+tipo_electrico.agregar_habilidad(curacion)
+tipo_electrico.agregar_habilidad(salto_trueno)
+
+print(tipo_electrico)
+
+print(tipo_electrico.obtener_habilidades())
+
+inventario_pikachu = Inventario(oro=50, objetos=[])
+pikachu = Jugador(
+    nombre="Pikachu",
+    nivel=1,
+    salud=100,
+    salud_maxima=100,
+    mana=100,
+    mana_maxima=100,
+    clase_personaje=tipo_electrico,
+    inventario=inventario_pikachu,
+    nombre_usuario="PikachuUser",
+    experiencia=0,
+    defensa=10,
+    ataque=10,
+    nivel_maximo = 100,
+)
+
+pikachu.agregar_objeto_inventario(pocion)
+pikachu.atacar(nigromante, habilidades[0])
+print(pikachu.atacar(nigromante, habilidades[0]))
+
+pikachu.recibir_daño(10)
+print(pikachu.recibir_daño(10))
+print(pikachu)
+
+pikachu.mostrar_inventario()
+print(pikachu.mostrar_inventario())
+
+
+pikachu.ganar_experiencia(300)
+print(pikachu.ganar_experiencia(300))
+
+"""
+

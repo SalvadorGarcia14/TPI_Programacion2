@@ -4,17 +4,17 @@ from typing import List
 
 class ClasePersonaje():
     
-    _contador_clases_personaje = 0  # Contador Id
+    _contador_clases_personaje = 0  # Contador globall Id
     
     def __init__(self, nombre: str, rol: str, poder_base: int, habilidades: List[Habilidad]):
         
-        self.__id_clase_personaje = ClasePersonaje._contador_clases_personaje
+        self.__id_clase_personaje = ClasePersonaje._contador_clases_personaje #asigna un ID unico
         ClasePersonaje._contador_clases_personaje += 1  # Incrementar el contador
         
         if not isinstance(poder_base, int) or poder_base < 0:
             raise ValueError("El poder base debe ser un entero no negativo.")
         
-        if not isinstance(habilidades, list) or len(habilidades) < 3:
+        if not isinstance(habilidades, list):
             raise ValueError("Debe proporcionar al menos tres habilidades.")
         
         self.__nombre = nombre
@@ -22,7 +22,8 @@ class ClasePersonaje():
         self.__poder_base = poder_base
         self.__habilidades = habilidades
         
-        
+    # Getters Y Setters
+ 
     @property
     def id_clase_personaje(self) -> int:
         return self.__id_clase_personaje
@@ -52,23 +53,23 @@ class ClasePersonaje():
     def habilidades(self) -> List[Habilidad]:
         return self.__habilidades
     
-    def agregar_habilidad(self, habilidad: Habilidad) -> None:
+    #Metodos
+    
+    def agregar_habilidad(self, habilidad: Habilidad) -> None: #Agrega una habilidad y veririca que no este repetida
         if habilidad not in self.habilidades:
             self.habilidades.append(habilidad)
         else:
             return f"La habilidad {habilidad.nombre} ya está en la lista de habilidades."
     
-    def obtener_habilidades(self) -> List[Habilidad]:
-        return self.habilidades
-    
-    def __str__(self):
+    def obtener_habilidades(self) -> List[Habilidad]: #DevuelvE lista con los nombres de las habilidades
         habilidades_nombres = []
         for habilidad in self.habilidades:
             habilidades_nombres.append(habilidad.nombre)
-        habilidades_str = ", ".join(habilidades_nombres)
-        
+        return habilidades_nombres
+    
+    def __str__(self):
+        habilidades_str = ", ".join(self.obtener_habilidades()) #Une las clases en una sola línea separada por comas
         return (
             f"ClasePersonaje ID: {self.id_clase_personaje} | Nombre: {self.nombre} | Rol: {self.rol} | "
             f"Poder Base: {self.poder_base} | Habilidades: [ {habilidades_str} ]"
         )
-            

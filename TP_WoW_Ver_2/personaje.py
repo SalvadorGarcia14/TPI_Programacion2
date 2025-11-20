@@ -7,8 +7,9 @@ from habilidad import Habilidad
 
 
 class Personaje(ABC):
-
-    _contador_id_personajes = 0 
+    #Clase abstracta que representa un personaje general del juego.
+    
+    _contador_id_personajes = 0  #Contador globar de Id unicos de cada personaje creado
     
     def __init__(self, nombre: str, nivel: int, salud: int,salud_maxima: int ,mana: int, mana_maxima: int,
                 clase_personaje: ClasePersonaje, inventario: Inventario):
@@ -29,10 +30,12 @@ class Personaje(ABC):
         self.__clase_personaje = clase_personaje
         self.__inventario = inventario
         
-        self.__habilidades: List[Habilidad] = clase_personaje.obtener_habilidades()
-    
+        self.__habilidades: List[Habilidad] = clase_personaje.obtener_habilidades() # Lista de habilidades que el personaje tiene según su clase
+
+    # Getters Y Setters
+
     @property
-    def id_personaje(self) -> int:
+    def id_personaje(self) -> int: #Id unico
         return self.__id_personaje
     
     @property
@@ -88,6 +91,8 @@ class Personaje(ABC):
     @property
     def habilidades(self) -> List[Habilidad]:
         return self.__habilidades
+    
+    #Metodos Abstractos
     
     @abstractmethod
     def atacar(self, objetivo, habilidad: Habilidad):

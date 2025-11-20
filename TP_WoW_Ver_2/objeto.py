@@ -5,7 +5,7 @@ import string
 class Objeto():
     def __init__(self, nombre: str, descripcion: str, tipo: str, efectos: Dict ,valor: int):
         
-        self.__id_objeto = Objeto.generador_aleatorios_id_obejtos()
+        self.__id_objeto = Objeto.generador_aleatorios_id_obejtos() #Crea un objeto con un ID aleatorio
         
         self.__nombre = nombre
         self.__tipo = tipo
@@ -13,7 +13,8 @@ class Objeto():
         self.__descripcion = descripcion
         self.__valor = valor
     
-    
+    # Getters Y Setters
+     
     @property
     def id_objeto(self) -> int:
         return self.__id_objeto
@@ -49,14 +50,16 @@ class Objeto():
     @valor.setter
     def valor(self, nuevo_valor: int):
         self.__valor = nuevo_valor
-        
+    
+    #Metodo de clase
     @classmethod
     def generador_aleatorios_id_obejtos(cls) -> str: #Genera un ID aleatorio de 3 a 6 caracteres numéricos.
         longitud_ids = random.randint(3, 6) # elige longitud aleatoria entre 3 y 6
         id_aleatorio = "".join(random.choices(string.digits, k=longitud_ids))
         return id_aleatorio
     
-    def usar(self) -> str:
+    #Metodos
+    def usar(self) -> str: #Simula 'usar' el objeto — en esta implementación solo muestra un mensaje.
         return f"Usando el objeto: {self.nombre}"
     
     def __str__(self):

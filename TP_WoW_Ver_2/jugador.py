@@ -19,7 +19,9 @@ class Jugador(Personaje):
         self.__defensa = defensa
         self.__ataque = ataque
         self.__nivel_maximo = nivel_maximo
-        
+    
+    # Getters Y Setters
+    
     @property
     def nombre_usuario(self) -> str:
         return self.__nombre_usuario
@@ -55,15 +57,17 @@ class Jugador(Personaje):
     def nivel_maximo(self, nuevo_nivel_maximo: int):
         self.__nivel_maximo = nuevo_nivel_maximo
     
+    #Metodos
+    
     def resetear_mana(self) -> int:
         self.mana = self.mana_maxima
     
-    def atacar(self, objetivo, habilidad):
-        if habilidad in self.clase_personaje.habilidades:
-            if self.mana >= habilidad.costo_mana:
-                self.mana -= habilidad.costo_mana
-                daño_total = habilidad.daño + self.clase_personaje.poder_base
-                objetivo.salud -= daño_total
+    def atacar(self, objetivo, habilidad): #Logica de ataque
+        if habilidad in self.clase_personaje.habilidades: #Validamos las habilidades pertenezcan a la clase del jugador
+            if self.mana >= habilidad.costo_mana: #Validamos mana sufiente
+                self.mana -= habilidad.costo_mana #Restamos mana usado
+                daño_total = habilidad.daño + self.clase_personaje.poder_base + self.ataque #Calculo del daño total / daño habilidad + poder base de la clase + ataque del jugador
+                objetivo.salud -= daño_total #Restamos daño a la salud del objetivo
                 return (f"{self.nombre} usó {habilidad.nombre} contra {objetivo.nombre}, causando {daño_total} de daño."
                         f" Mana restante: {self.mana}.")
             else:
@@ -71,15 +75,15 @@ class Jugador(Personaje):
         else:
             return f"{self.nombre} no posee la habilidad {habilidad.nombre}."   
 
-    def recibir_daño(self, cantidad):
-        self.salud -= cantidad
-        if self.salud < 0:
+    def recibir_daño(self, cantidad): #Logica de Recibir daño
+        self.salud -= cantidad #Descuenta el daño recibido
+        if self.salud < 0: #Si la salud baja de cero, queda en 0 y se considera derrotado
             self.salud = 0
             return f"{self.nombre} ha sido derrotado."
         return f"{self.nombre} recibe {cantidad} de daño. Salud restante: {self.salud}."
     
     
-    def calcular_experiencia_nivel(self):
+    def calcular_experiencia_nivel(self): #Cálculo de experiencia necesaria por nivel (nivel_n = 100 * 2^(nivel-1))
         """Retorna la experiencia necesaria para pasar al siguiente nivel."""
         return 100 * (2 ** (self.nivel - 1))
 
@@ -88,18 +92,18 @@ class Jugador(Personaje):
         Gana experiencia y sube de nivel si alcanza la experiencia requerida.
         Cada nivel requiere el doble de experiencia que el anterior.
         """
-        self.experiencia += cantidad
+        self.experiencia += cantidad # Se suma la experiencia ganada
         mensaje = f"{self.nombre} ha ganado {cantidad} puntos de experiencia.\n"
 
-        while self.nivel < self.nivel_maximo:
+        while self.nivel < self.nivel_maximo: # Bucle para subir múltiples niveles si existe suficiente experiencia 
             experiencia_necesaria = self.calcular_experiencia_nivel()
 
-            # Si alcanza para subir de nivel
-            if self.experiencia >= experiencia_necesaria:
-                self.experiencia -= experiencia_necesaria
-                self.nivel += 1
+            #Si alcanza la experiencia necesaria, sube de nivel
+            if self.experiencia >= experiencia_necesaria: 
+                self.experiencia -= experiencia_necesaria #Se descuenta la experencia
+                self.nivel += 1 #Y sube de nivel
 
-                clase = self.clase_personaje.nombre.lower()
+                clase = self.clase_personaje.nombre.lower() #Bonus por clase
 
                 if clase == "guerrero":
                     self.salud += 20
@@ -142,36 +146,40 @@ class Jugador(Personaje):
 
         return mensaje
 
-    def esta_vivo(self) -> bool:
+    def esta_vivo(self) -> bool: # Verifica si el jugador sigue vivo
         return self.salud > 0
 
-    def agregar_objeto_inventario(self, objeto):
+    def agregar_objeto_inventario(self, objeto): #Delegamos en el inventario la acción de agregar objetos
         return self.inventario.agregar_objeto(objeto)
 
     def mostrar_inventario(self) -> List[str]:
         return self.inventario.mostrar_objetos()
     
-    def ganar_oro(self, cantidad):
+    def ganar_oro(self, cantidad): # Gana oro usando la función del inventario
         self.inventario.modificar_oro(cantidad)
         return cantidad
+    
+    #Aplicar efectos de objetos o Buffs
     
     def aplicar_efecto(self, efectos: dict):
     
         if "vida" in efectos:
             self.salud = self.salud + efectos["vida"]
-            if self.salud > self.salud_maxima:
+            if self.salud > self.salud_maxima: # Si se excede la vida máxima, se ajusta
                 self.salud = self.salud_maxima
 
-        if "vida_max" in efectos:
+        if "vida_max" in efectos: 
             self.salud_maxima = self.salud_maxima + efectos["vida_max"]
-            self.salud = self.salud + efectos["vida_max"]
+            self.salud = self.salud + efectos["vida_max"] # Se otorga el aumento de vida adicional
 
         if "ataque" in efectos:
             self.ataque += efectos["ataque"]
 
         if "defensa" in efectos:
             self.defensa += efectos["defensa"]
-        
+    
+    #Remuve los efectos temporales o Debuffs
+    
     def remover_efecto(self, efectos: dict):
         if "vida_max" in efectos:
             if self.hp_actual > self.salud_maxima:

@@ -5,7 +5,9 @@ class Habilidad():
         self.__tipo = tipo
         self.__costo_mana = costo_mana
         self.__daño = daño
-    
+
+    # Getters Y Setters
+   
     @property
     def nombre(self) -> str:
         return self.__nombre
@@ -34,8 +36,6 @@ class Habilidad():
     def daño(self, daño: int):
         self.__daño = daño
     
-    def usar(self, objetivo: str) -> None:
-        return f"{self.nombre} usada contra {objetivo}, causando {self.daño} de daño."
-    
+
     def __str__(self):
         return f"Habilidad: {self.nombre} | Tipo: {self.tipo} | Costo de Mana: {self.costo_mana} | Daño: {self.daño}"

@@ -14,6 +14,8 @@ class Inventario():
         self.__objetos = objetos
         self.__equipados: List = [] 
     
+    # Getters Y Setters
+    
     @property
     def id_inventario(self) -> int:
         return self.__id_inventario
@@ -33,49 +35,55 @@ class Inventario():
     def equipados(self) -> List[Objeto]:
         return self.__equipados
     
-    def agregar_objeto(self, objeto: Objeto) -> str:
-        if len(self.objetos) >= 20:
+    #Metodos
+    
+    def agregar_objeto(self, objeto: Objeto) -> str: #Agrega un objeto al inventario si hay espacio disponible
+        if len(self.objetos) >= 20: #Limite 20 objetos
             print("El inventario está lleno.")
             return
         self.objetos.append(objeto)
         print(f"{objeto.nombre} agregado al inventario.")
     
         
-    def remover_objeto(self, objeto: Objeto) -> str:
+    def remover_objeto(self, objeto: Objeto) -> str: #Elimina un objeto del inventario si existe
         if objeto in self.objetos:
             self.objetos.remove(objeto)
         else:
             return f"El objeto {objeto.nombre} no está en el inventario."
     
-    def mostrar_objetos(self) -> List[Objeto]:
+    def mostrar_objetos(self) -> List[Objeto]: #Devuelve la lista completa de objetos presentes
         return self.objetos
     
-    def modificar_oro(self, cantidad: int):
+    def modificar_oro(self, cantidad: int): # Modifica la cantidad de oro sumando o restando el valor recibido
         self.oro += cantidad
         return self.__oro
     
+    #Metodos de interacción con objetos
     
-    
-    def usar_objeto(self, jugador, indice):
-        objeto = self.objetos[indice]
+    def usar_objeto(self, jugador, indice): #Ejecuta la acción del objeto según su tipo
+        #Consumible: aplica efectos y se elimina del inventario
+        #Equipable: aplica efectos y se mueve a la lista de equipados
+        objeto = self.objetos[indice] # Accede al objeto seleccionado mediante indice
 
-        if objeto.tipo == "consumible":
-            jugador.aplicar_efecto(objeto.efectos)
+        if objeto.tipo == "consumible": #Si el objeto es consumible, se usa una vez y se elimina
+            jugador.aplicar_efecto(objeto.efectos) # Aplica los efectos del objeto
             print(f"Usaste {objeto.nombre}.")
             self.objetos.pop(indice)
 
-        elif objeto.tipo == "equipable":
+        elif objeto.tipo == "equipable": # Si es equipable, se agregan efectos y se marca como equipado
             if objeto in self.equipados:
                 print("Ese objeto ya está equipado.")
             else:
-                jugador.aplicar_efecto(objeto.efectos)
-                self.equipados.append(objeto)
+                jugador.aplicar_efecto(objeto.efectos) # Aplica efectos de equipamiento
+                self.equipados.append(objeto)# Lo añade a la lista de equipados
                 print(f"Equipaste {objeto.nombre}.")
     
     
-    def desequipar(self, jugador, indice):
-        objeto = self.equipados[indice]
-        jugador.remover_efecto(objeto.efectos)
+    def desequipar(self, jugador, indice): # Quita un objeto equipable:
+        #Remueve sus efectos del jugador
+        #Lo retira de la lista de equipados
+        objeto = self.equipados[indice]#  Se obtiene el objeto equipado
+        jugador.remover_efecto(objeto.efectos) # Se quitan los efectos aplicados
         self.equipados.remove(objeto)
         print(f"Desequipaste {objeto.nombre}.")
     
