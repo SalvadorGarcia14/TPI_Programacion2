@@ -118,6 +118,7 @@ habilidades = [
 ]
 
 
+
 # Clases de Personaje
 guerrero = ClasePersonaje("Guerrero", "Tank", 15, [ataque_basico_guerrero, golpe_de_escudo, carga, tormenta_de_espadas])
 mago = ClasePersonaje("Mago", "DPS", 10, [ataque_basico_mago, bola_de_fuego, rayo_de_hielo, tormenta_de_escarcha])
@@ -254,15 +255,71 @@ jugadores = [
 
 #Enemigos Precargados
 
+
+#Habilidades Enemigas
+
+#Habilidad de Lobo Feroz
+mordida = Habilidad("Mordida", "Física", 5, 10) #0
+zarpa = Habilidad("Zarpazo", "Fisica", 10, 12)#1
+salgo_zarpa = Habilidad("Salto Zarpa", "Fisica" ,5, 6)#2
+
+#Habilidad de Troll del Bosque
+lanzar_hacha = Habilidad("Lanzar Hacha", "Física", 10, 20) #3
+aturdir = Habilidad("Aturdir", "Física", 10, 10) #4
+ataque_multiple = Habilidad("Ataques Multiples", "Fisica", 15, 25) #5
+
+#Habilidad Nigromante
+miedo = Habilidad("Lanzar Miedo","Sombras", 5, 10) #6
+levantar_muertos = Habilidad("Levantar Muertos", "Sombras", 10, 15) #7
+explosion_vil = Habilidad("Explocion Oscura", "Sombras", 20, 40) #8
+
+#Habilidad Dragon Rojo
+vuelo_poderoso = Habilidad("Vuelo Poderoso", "Fisica", 10, 20)
+aliento_fuego = Habilidad("Aliento de Fuego Destructivo", "Elemental", 20, 60)
+aliento_final = Habilidad("Aliento de Fuego Final", "Elemental", 30, 90)
+
+#Agregar habilidades
+
+habilidades_enemigas = [
+    
+]
+#Lobo Feroz
+habilidades_enemigas.append(mordida) #0
+habilidades_enemigas.append(zarpa) #1
+habilidades_enemigas.append(salgo_zarpa) #2
+
+#Troll del Bosque
+habilidades_enemigas.append(lanzar_hacha) #3
+habilidades_enemigas.append(aturdir) #4
+habilidades_enemigas.append(ataque_multiple) #5
+
+#Nigromante
+habilidades_enemigas.append(miedo) #6
+habilidades_enemigas.append(levantar_muertos) #7
+habilidades_enemigas.append(explosion_vil) #8
+
+#Dragon Rojo
+habilidades_enemigas.append(vuelo_poderoso) #9
+habilidades_enemigas.append(aliento_fuego) #10
+habilidades_enemigas.append(aliento_final) #11
+
+#Clase Enemigos
+
+guerrero_enemigo_lobo = ClasePersonaje("Guerrero Lobo Feroz", "Taks", 15, habilidades_enemigas[0: 3])
+guerrero_troll_del_bosque = ClasePersonaje("Guerrero Troll Del Bosque", "DPS", 20, habilidades_enemigas[3: 6])
+mago_nigromante = ClasePersonaje("Nigromante", "DPS", 20, habilidades_enemigas[6 : 9])
+dragon_rojo_unico = ClasePersonaje("Dragon Rojo", "DPS/Tank", 20,habilidades_enemigas[9: 12] )
+
+
 # Enemigos Precargados
 lobo_feroz = Enemigo(
     nombre="Lobo Feroz",
     nivel=5,
     salud=20,
     salud_maxima=20,
-    mana=20,
-    mana_maxima=20,
-    clase_personaje=guerrero, 
+    mana=30,
+    mana_maxima=30,
+    clase_personaje=guerrero_enemigo_lobo, 
     inventario=Inventario(oro=0, objetos=[]),
     tipo_enemigo="común",
     recompensa_experiencia=50,
@@ -274,9 +331,9 @@ trol_bosque = Enemigo(
     nivel=7,
     salud=70,
     salud_maxima=70,
-    mana=30,
-    mana_maxima=30,
-    clase_personaje=guerrero,
+    mana=50,
+    mana_maxima=50,
+    clase_personaje=guerrero_troll_del_bosque,
     inventario=Inventario(oro=0, objetos=[]),
     tipo_enemigo="raro",
     recompensa_experiencia=80,
@@ -288,20 +345,56 @@ nigromante = Enemigo(
     nivel=10,
     salud=100,
     salud_maxima=100,
-    mana=80,
-    mana_maxima=80,
-    clase_personaje=mago,
+    mana=100,
+    mana_maxima=100,
+    clase_personaje=mago_nigromante,
     inventario=Inventario(oro=0, objetos=[]),
     tipo_enemigo="épico",
     recompensa_experiencia=150,
     rango_oro=[50,60]
 )
 
+dragon_rojo = Enemigo(
+    nombre="Dragon Rojo", 
+    nivel=20,
+    salud=400,
+    salud_maxima=400,
+    mana=300,
+    mana_maxima=300,
+    clase_personaje=dragon_rojo_unico,
+    inventario=Inventario(oro=50, objetos=[]),
+    tipo_enemigo="legendario",
+    recompensa_experiencia=100,
+    rango_oro=[100,200]  
+)
+
+#Objetos de dragon
+objeto_huevo_dragon = Objeto(
+    nombre="Huevo de Dragon Rojo",
+    descripcion="Este es un objeto unico de Dragon",
+    tipo=None, #No se equipa
+    efectos=None, #No tiene efecto
+    valor= 500
+    
+)
+
+inventario_salvi.agregar_objeto(objeto_huevo_dragon)
+
+
 enemigos = [
     lobo_feroz,
     trol_bosque,
-    nigromante
+    nigromante,
+    dragon_rojo
 ]
+
+"""
+    
+for enemigo in enemigos:
+    print(enemigo)
+
+"""
+
 
 #Agrupacion global de los datos precargados
 def obtener_datos_precargados(): #Devuelve todas las colecciones del juego.

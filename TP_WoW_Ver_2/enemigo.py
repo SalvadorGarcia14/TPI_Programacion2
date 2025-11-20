@@ -76,10 +76,10 @@ class Enemigo(Personaje):
         return self.salud > 0
 
     def agregar_objeto_inventario(self, objeto) -> None: # Los enemigos no agregan objetos a su inventario
-        return None
+        pass
 
     def mostrar_inventario(self) -> None:
-        return None
+        return []
 
     def calcular_recompensa(self) -> tuple[int, int]: #Calculo de experencia y oro
         #Formula segun el nivel y la rareza / EXP final = nivel_factor * tipo_factor

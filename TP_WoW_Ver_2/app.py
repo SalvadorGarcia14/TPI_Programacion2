@@ -67,16 +67,23 @@ def submenu_combate(jugador_activo): #Bucle principal del menú de combate
         print("3. Usar Objeto")
         print("4. Volver al Menú Principal")
         
-        opcion = input("Elige una opción: ")      
+        opcion = input("Elige una opción: ")
 
         if opcion == "1":
+            if not enemigos:
+                print("No hay enemigos cargados.")
+                pausar()
+                continue
+
             enemigo = random.choice(enemigos)
-            enemigo.resetear_salud()  # Resetea su salud antes de pelear
-            enemigo.resetear_mana() 
+            enemigo.resetear_salud()
+            enemigo.resetear_mana()
             jugador_activo.resetear_mana()
-            print(f"¡Has encontrado un {enemigo.nombre} de nivel {enemigo.nivel}!\n")
+
+            print(f"\n¡Has encontrado un {enemigo.nombre} de nivel {enemigo.nivel}!\n")
             combate(jugador_activo, enemigo)
             pausar()
+
         elif opcion == "2":
             print(jugador_activo)
             pausar()
@@ -100,14 +107,14 @@ def combate(jugador_activo, enemigo):
     
     #Controla cuando muere uno o el jugador huye
     while jugador_activo.esta_vivo() and enemigo_vivo:
-        print(f"\n{jugador_activo.nombre}: {jugador_activo.salud} HP | Daño Basico: {jugador_activo.ataque} |Mana: {jugador_activo.mana}")
+        print(f"\n {jugador_activo.nombre}: {jugador_activo.salud} HP | Daño Basico: {jugador_activo.ataque} | Mana: {jugador_activo.mana}")
         print(f"{enemigo.nombre}: {enemigo.salud} HP | Mana: {enemigo.mana}\n")
         
         if turno_jugador:
             print("=== Tu turno ===")
             print("1. Ataque básico")
             print("2. Usar habilidad")
-            print("4. Huir del combate")
+            print("3. Huir del combate")
 
             opcion = input("Elige una acción: ")
             
@@ -123,22 +130,20 @@ def combate(jugador_activo, enemigo):
                 # Mostrar solo las habilidades de la clase del jugador
                 for i, habilidad in enumerate(jugador_activo.clase_personaje.habilidades):
                     print(f"{i + 1} - {habilidad}")
-        
+
                 eleccion = input("Elige habilidad: ")
                 #Verifica tipo num y el rango
                 if eleccion.isdigit():
                     indice = int(eleccion) - 1
-        
                     if 0 <= indice < len(jugador_activo.clase_personaje.habilidades):
                         habilidad = jugador_activo.clase_personaje.habilidades[indice]
-                        resultado = jugador_activo.atacar(enemigo, habilidad)
-                        print(resultado)
+                        print(jugador_activo.atacar(enemigo, habilidad))
                     else:
                         print("Opción fuera de rango.")
                 else:
                     print("Debes ingresar un número válido.")
 
-            elif opcion == "4":
+            elif opcion == "3":
                 print(f"{jugador_activo.nombre} huyó del combate ")
                 return
             
@@ -164,22 +169,21 @@ def combate(jugador_activo, enemigo):
                     drop = random.choice(objetos)
                     print(f"El enemigo dejó caer un objeto: {drop.nombre}")
                     jugador_activo.agregar_objeto_inventario(drop)
-                    break
+                break
 
             turno_jugador = False  # Ahora ataca el enemigo
 
         else:
             # Turno del enemigo
-            print(f"=== Turno de {enemigo.nombre} === \n")
+            print(f"\n=== Turno de {enemigo.nombre} ===\n")
             habilidad_enemiga = random.choice(enemigo.clase_personaje.habilidades)
-            print(enemigo.atacar(jugador_activo, habilidad_enemiga))
+            print(enemigo.atacar(jugador_activo, habilidad_enemiga))               
+
             
             # Verifica muerte del jugador
             if not jugador_activo.esta_vivo():
-                print(f" {jugador_activo.nombre} ha muerto en combate. \n")
+                print(f"{jugador_activo.nombre} ha muerto en combate.\n")
                 pausar()
-            if not jugador_activo.esta_vivo():
-                print("Tu personaje ha muerto! \n")
                 #Maneja pérdida de objetos y revive
                 manejar_objetos_perdidos(jugador_activo)
                 break

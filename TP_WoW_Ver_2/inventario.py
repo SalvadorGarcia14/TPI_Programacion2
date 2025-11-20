@@ -77,6 +77,9 @@ class Inventario():
                 jugador.aplicar_efecto(objeto.efectos) # Aplica efectos de equipamiento
                 self.equipados.append(objeto)# Lo añade a la lista de equipados
                 print(f"Equipaste {objeto.nombre}.")
+        else:
+            # Cualquier otro tipo de objeto no válido
+            print("Este objeto no se puede consumir o equipar")
     
     
     def desequipar(self, jugador, indice): # Quita un objeto equipable:
